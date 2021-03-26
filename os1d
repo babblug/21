@@ -1,0 +1,162 @@
+Priority scheduling:
+A Priority is associated with each process and the CPU is allocated to the 
+process with the highest priority. Equally process are scheduled in FCFS order. An 
+SJF algorithm is simply a priority algorithm where priority(p) is inverse of the 
+(predicated) next burst. The larger the CPU burst, the lower the priority and vice 
+versa.
+Scheduling is discussed in terms of high priority and low priority. Priorities 
+are generally indicated by some fixed range of numbers, such as 0 to 7 or 0 to 
+4,095. Here we assume that low numbers represent high priority.
+Algorithm
+Step 1: Start
+Step 2: Read the number of processes, process name, arrival time, burst time and 
+priority.
+Step 3: if P[i-1].ft < P[i].at and i=0
+Then P[i].st =P[i].at
+Step 4: else
+Select the process which is having minimum based on arrival time.
+Step 5: P[i].ft = P[i].st+P[i].bt
+P[i].wt= P[i].bt + P[i].wt
+Step 6: Repeat until the completion of all the processes.
+Step 5: end24
+Example:
+Process Arrival 
+time
+Burst 
+time
+Priority Start 
+time
+Finish 
+time
+Turn 
+around 
+time
+Waiting 
+time
+P 1 7 10 3 9 19 12 2
+P2 3 1 1 6 7 4 3
+P3 2 2 3 7 9 7 5
+P4 0 1 4 0 1 1 0
+P5 1 5 2 1 6 5 0
+Gantt chart:
+P4 P5 P2 P3 P1
+0 1 6 7 9 19
+Average turn around time=(12+4+7+1+5)/5= 29/5= 5.8
+Average waiting time = (2+3+5+0+0)= 10/5 = 2
+Program:
+#include <stdio.h>
+#include <stdlib.h>
+#define size 10
+struct process
+{
+Char name[10];
+Int at, bt, priority, st, ft, tt, wt;
+};
+struct process P[size];
+int n;25
+void ready_queue()
+{
+struct process temp;
+int I,j;
+for(i=0;i<n-1;i++)
+{
+for(j=i+1;j<n;j++)
+{
+Temp=P[i];
+P[i]=P[j];
+P[j]=temp;
+}
+}
+Int main()
+{
+Int avgtt=0, avgwt=0, minpos=0;
+Int I,j,k;
+struct process temp;
+printf("/n Enter number of processes:");
+scanf("%d",&n);
+for(i=0;i<n;i++)
+{
+printf("Enter the name of process/n");26
+scanf("%s", p[i].name);
+printf("Enter arrival time, burst time and priority/n");
+scanf("%d%d%d",&p[i].at,&p[i].bt,&p[i].priority);
+}
+ready_queue();
+for(i=0;i<n;i++){
+if(((p[i-1].ft<p[i].at||(i==0))
+p[i].st=p[i].at;
+else
+{
+for(j=i+1;j<n;j++)
+ {
+ if(p[i-1].ft>=p[j].at)
+ continue;
+ else
+ break;
+ }
+minpos=1;
+for(k=i+1;k<j;k++)
+ {
+ if(p[minpos].priority>p[k].priority)
+ minpos=k;
+ }27
+temp=p[i];
+p[i]=p[minpos];
+p[minpos]=temp;
+p[i].st=p[i].ft;
+}
+p[i].ft=p[i].st+p[i].bt;
+p[i].wt=p[i].st+p[i].at;
+p[i].tt=p[i].bt-p[i].wt;
+}
+printf("/n Execution starts:/n");
+printf("Name\t Arrival time\tBurst time\tPriority\tStart time\tFinish 
+time\tTurnaround time\t waiting time/n");
+for(i=0;i<n;i++)
+{
+ avgtt+=p[i].tt;
+ avgwt+=p[i].wt;
+ 
+printf("%s\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t/n",p[i].name,p[i].at,p[i].bt,p
+[i].priority,p[i].st,p[i].ft,p[i].tt,p[i].wt);
+}
+printf("/n Average turnaroundtime:%f",avgtt/(float)n);
+printf("/n Average waitingtime:%f",avgwt/(float)n);
+return 0;
+}28
+Output:
+Enter number of processes 4
+Enter the name of process
+P1
+Enter arrival time, burst time and priority
+1 2 2
+Enter the name of process
+P2
+Enter arrival time, burst time and priority
+0 4 4
+Enter the name of process
+P3
+Enter arrival time, burst time and priority 4 5 3
+Enter the name of process P4
+Enter arrival time, burst time and priority 8 6 1
+execution starts:
+Name Arrival 
+Time
+Burst 
+Time
+Priority Start 
+time
+Finish 
+time
+Turnaro
+und time
+Waiting 
+time
+P1 0 4 4 0 4 4 0
+P2 1 2 2 4 6 5 3
+P3 4 5 3 6 11 7 2
+P4 8 6 1 11 17 9 3
+Average Turnaround time: 6.25
+Average waiting time: 2.0029
+AIM:
+Multiprogrammi
