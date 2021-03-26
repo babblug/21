@@ -1,0 +1,415 @@
+Aim: Simulate Bankers algorithm for deadlock avoidance.
+Deadlock avoidance:
+By the deadlock-prevention algorithms, it may lead to low device utilization 
+and reduced system throughput. An alternative method for avoiding deadlocks is to 
+require additional information about how resources are to be requested. With this 
+knowledge of the complete sequence of the requests and releases for each process, 
+the system can decide for each request whether or not the process should wait inorder 
+to avoid a possible deadlock. Each request requires that in making this decision the 
+system consider the resources currently available, the resources currently allocated 
+to each process and the future requests and releases of each process.
+A deadlock-avoidance algorithm dynamically examines the resourceallocation state to ensure that a circular wait condition can never exist. The resourceallocation state is defined by the number of available and allocated resources and the 
+maximum demands of processes.
+Safe State:
+A state is “safe” if the system can allocate resources to each process in solve order 
+and still avoid a deadlock. More formally, a system is in a safe state only if there 
+exists a safe sequence. A sequence of processes <p1,p2,…,pn> is a safe sequence 
+for the current allocation state if, for each pi, the resource requests that pi can still 
+make can be satisfied by the currently available resources plus the resources held 
+by all pj, with j<i. In this situation if the resources that pi needs are not immediately 
+available then wait until all pj have finished. When they have finished, pi can obtain 
+all of its needed resources, complete its designated task, return its allocated 
+resources, and terminate when pi terminates, pi+1 can obtain its needed resources, 
+and so on. If no such sequence exists, then the system state is said to be “unsafe”.50
+A safe state is not a deadlock state. Conversely, a deadlock state is an unsafe 
+state. Not all unsafe states are deadlocks. However, an unsafe state may lead to a 
+deadlock. As long as the state is safe, the OS can avoid unsafe states. In an unsafe 
+state, the operating system cannot prevent processes from requesting resources in 
+such a way that a deadlock occurs. The behavior of the process controls unsafe 
+states.
+ 
+Safe, Unsafe and deadlock state spaces
+The resource-allocation-graph is not applicable to a resource allocation system 
+with multiple instances of each resource type. Banker’s algorithm is used in that 
+case. The name was chosen because the algorithm could be used in a banking 
+system to ensure that the bank never allocated its available cash in such a way that 
+it could no longer safety the needs of all its customers.
+When a new process enters the system, it must declare the maximum no. of 
+instances of each resource type that it may need. This number may not exceed the 
+total number of resource in the system. When a user requests a set of resources, the 
+system must determine whether the allocation of these resources are allocated 
+otherwise, the process must wait until some other process releases other resources.
+Several data structures must be maintained to implement the banker’s algorithm.
+Let n= no. of processes, m= number of resources types
+• Available: A vector of length m. If Available[j]=k, there are k instances of 
+resources type Rj available.51
+• Max: An nxm matrix. If Max[i,j]=k, then process pi may request at most k 
+instances of resource type Rj.
+• Need: An nxm matrix. If need[i,j]=k, then pi may need k more instances of 
+Rj to complete its task.
+Need[i,j] = Max[i,j] – Available[i,j].
+SAFETY ALGORITHM: 
+ To change whether your system is in safe state or not with the available 
+processes.We take two vectors of length m and n, work and finish.
+1.Initialize work=Available
+ Finish[i]=false for i=0,1,2,----n-1
+2.Find a process I such that Finish[i]=false
+Needi<=work
+ If no such i exists,go to step4.
+3.work=work+allocation;
+ Finish[i]=true
+ Go to step2
+4.If finish[i]==true for all I, then the system is in a safe statE.
+RESOURCE-REQUEST ALGORITHM FOR PROCESS PI:-
+To know whether after accepting a request from the process the system will be in a 
+safe state or not.
+Request=request vector for process Pi.If requesti[j]=k then process Pi wants k 
+instances of resource type Rj.
+1.If Requesti<=Needi go to step2.Otherwise,raise error condition,since process has 
+exceeded its maximum claim.52
+2.If Requesti<=allocation,go to step3.Otherwise Pi must wait,since resources are 
+not available.
+3.Pretend to allocate requested resources to Pi by modifying the state as follows:
+ Available=Available-Request;
+ Allocationi=Allocationi+Request1;
+ Needi=Needi-Requesti;
+ ->if safe => the resources are allocated to Pi
+ ->if unsafe => Pi must wait and old resources allocation state is restored.
+EXAMPLE:-
+Consider the following snapshot of a system
+ ALLOCATION MAX NEED AVAILABLE
+ A B C D A B C D A B C D A B C D
+P0 0 0 1 2 0 0 1 2 0 0 0 0 1 5 2 0
+P1 1 0 0 0 1 7 5 0 0 7 5 0
+P2 1 3 5 4 2 3 5 6 1 0 0 2
+P3 0 6 3 2 0 6 5 2 0 0 2 0
+P4 0 0 1 4 0 6 5 6 0 6 4 2
+P0 → Finish(0)=false
+ Need0<work => finish(0)=True
+Work=(1 5 2 0)+(0 0 1 2)
+=1 5 3 2
+P1 → Finish(1)=false
+ Need0>work
+P2 → Finish(2)=false53
+Need2<work => finish(2)=True
+Work=(1 5 3 2)+(1 3 5 4)
+=( 2 8 8 6)
+P3 → Finish(3)=false
+Need3<work => finish(3)=True
+Work=(2 8 8 6)+(0 6 3 2)
+=2 14 11 8
+P4 → Finish(4)=false
+Need4<work => finish(4)=True
+Work=(2 14 11 8)+(0 0 1 4)
+=2 14 12 12
+P0 → Finish(0)=true
+P1 → Finish(1)=false
+Need1<work => finish(1)=True
+Work=(2 14 12 12)+(1 0 0 0)
+=3 14 12 12
+SAFETY SEQUENCE=P0,P2,P3,P4,P1
+IF A REQUEST FROM PROCESS P1 ARRIVES FOR (0 4 2 0) CAN THE 
+REQUEST BE GRANTED IMMEDIATELY.
+(1).Request<=Need
+ (0 4 2 0) (0 7 5 0)54
+(2).Request<=Availability
+ (0 4 2 0) (1 5 2 0)
+(3). Available=(1 5 2 0) -(0 4 2 0)= 1 1 0 0
+ Allocation=(0 4 2 0)+(1 5 2 0)=1 4 2 0 
+ Needi=(0 7 5 0)-(0 4 2 0)=0 3 3 0
+APPLYING SAFETY ALGORITHM:-
+P0 → Finish(0)=false
+ Need0<work => finish(0)=True
+Work=(1 1 0 0)+(0 0 1 2)
+=1 1 1 2
+P1 → Finish(1)=true
+ Need1>work
+P2 → Finish(2)=false
+Need2<work => finish(2)=True
+Work=(1 1 1 2)+(1 3 5 4)
+=( 2 4 6 6)
+P3 → Finish(3)=false
+Need3<work => finish(3)=True
+Work=(2 4 6 6)+(0 6 3 2)
+=2 10 9 8
+P4 → Finish(4)=false
+Need4<work => finish(4)=True
+Work=(2 10 9 8)+(0 0 1 4)55
+=2 10 10 12
+P1 → Finish(1)=false
+Need1<work => finish(1)=True
+Work=(2 10 10 12)+(1 4 2 0)
+=3 14 12 12
+SAFETY SEQUENCE=P0,P2,P3,P4,P1
+Program:
+#include<stdio.h>
+#include<stdlib.h>
+#define size 10
+int n,m,available[size],max[size][size],allocation[size][size],need[size][size];
+int safety_alg();
+int main()
+{
+int I,j,choice,x;
+printf(“enter the number of processes\n”);
+scanf(“%d”,&n);
+printf(“enter the number of resourses\n”);
+scanf(“%d”,&m);
+for(i=0;i<m;i++)
+{
+printf(“available instances of resources R%d”,i);56
+scanf(“%d”,&available[i]);
+}
+for(i=0;i<n;i++)
+{
+printf(“\nFOR PROCESS P%d\n\n”,i);
+printf(“Maximum instances required of resourses\n”);
+for(j=0;j<m;j++)
+{
+printf(“\tR%d-->”,j);
+scanf(“%d”,&max[i][j]);
+}
+printf(“number of instances allocated of resources”);
+for(j=0;j<n;j++){
+printf(“\tR%d→”,j);
+scanf(“%d”,&max[i][j]);
+ }
+pintf(“No of instances allocated of resources ”);
+for(j=0;j<n;j++){
+printf(“\tR%d→,j);
+ scanf(“%d”,&max[i][j]);
+}
+printf(“number of instances allocated of resources”);57
+for(j=0;j<m ; j++){
+printf(“\tR%d→,j);
+ scanf(“%d”,&need[i][j]);
+}
+}
+X=safety_alg();
+If(x==2) return 0;
+printf(“New requests can be entered now ”);
+do{
+rr_alg();
+printf(“Do you want to make an additional request 1 for YES 0 for No”);
+scanf(“%d”,&choice);
+}while(choice!=0);
+return 0;
+}
+int safety_alg(){
+int I,j,k,p,work[m],finish[n],a[n],t=0,q;
+for(i=0;i<m ; i++){
+work[i]=available[i];
+for(i=0;i<n ; i++)
+finish[i]=0;
+do{58
+for(i=0;i<n ; i++)
+q=t;
+if(finish[i]==0;){
+for(j=0;j<m ; j++)
+if(need[i][j]>work[j])
+break;
+if(j==m)
+for(k=0;k<m ; k++)
+work[k]=work[k]+allocation[i][j];
+finish[i]=1;
+a[t++]=I;
+}
+}
+}
+If(t==q) goto step;
+}while(t!=n);
+step:
+for(i=0;i<n;i++)
+if(finish[i]==0)
+break;
+if(i==n)
+{
+ printf("\n\nSystem is in safe state\n");59
+ printf("\nSafe sequence\n");
+ for(k=0;k<n;k++)
+ {
+ printf("p%d\t",a[k]);
+ }
+ printf("\n\n");
+}
+else
+{
+ printf("System is in unsafe state");
+ return 2;
+}
+}
+void rr_alg()
+{
+ int i,p,request[n],a[m],b[m]c[m],x;
+ printf("Enter the process no :\n");
+ scanf("%d",&p);
+ printf("Enter the request of process %d\n",p);
+ for(i=0;i<m;i++)
+ {
+ printf("Enter the request instance of resource %d\n",p);
+ scanf("%d",&request[i]);60
+ }
+ for(i=0;i<m;i++)
+ {
+ if(req[i]>need[p][i])
+ break;
+ }
+}
+if(i!=m)
+{
+ printf("\nprocess has exceed its maximum claim\n");
+ return;
+}
+for(i=0;i<m;i++)
+{
+ if(request[i]>available[i])
+ break;
+}
+if(i!=m)
+{
+ printf("\nProcess %d must wait as resources are not available\n");
+ return;
+}
+for(i=0;i<m;i++)61
+{
+ a[i]=available[i];
+ b[i]=allocation[p][i];
+ c[i]=need[p][i];
+ available[i]=available[i]-requet[i];
+ allocation[p][i]=allocation[p][i]+request[i];
+ need[p][i]=need[p][i]=need[p][i]-request[i];
+}
+x=safety_alg();
+if(x==1)
+{
+ printf("Resources are allocated to process %d \n",p);
+}
+else{
+ printf("process %d must wait\n",%p);
+ for(i=0;i<n;i++)
+ {
+ available[i]=a[i];
+ aallocation[p][i]=b[i];
+ nedd[p][i]=c[i];
+ }
+}
+return;62
+}
+Output:
+Enter the number of processes
+5
+Enter the number of resources
+3
+‘available instances of resources R0:3
+‘available instances of resources R1:3
+‘available instances of resources R2:2
+FOR PROCESS P0
+‘Maximum’ instances required of resources
+R0→7
+R1→5
+R2→3
+No of instances ‘allocated’ of resource
+R0→0
+R1→1
+R2→0
+No of instances ‘needed’ of resource63
+R0→7
+R1→4
+R2→3
+FOR PROCESS P1
+‘Maximum’ instances required of resource
+R0→3
+R1→2
+R2→2
+No of instances ‘allocated’ of resource
+R0→2
+R1→0
+R2→0
+No of instances ‘needed’ of resource
+R0→1
+R1→2
+R2→2
+FOR PROCESS P2
+‘Maximum’ instances required of resource
+R0→9
+R1→0
+R2→2
+No of instances ‘allocated’ of resource
+R0→364
+R1→0
+R2→2
+No of instances ‘needed’ of resource
+R0→6
+R1→0
+R2→0
+FOR PROCESS P3
+‘Maximum’ instances required of resource
+R0→2
+R1→2
+R2→2
+No of instances ‘allocated’ of resource
+R0→2
+R1→1
+R2→1
+No of ‘instances’ needed of resource
+ R0→0
+ R1→1
+ R2→1
+FOR PROCESS P4
+‘Maximum’ instances required of resource
+ R0→4
+ R1→365
+ R2→3
+No of instances ‘allocated’ of resource
+ R0→0
+ R1→0
+ R2→2
+Noof instances ‘needed’ of resource
+ R0→4
+ R1→3
+ R2→1
+System is in safe state
+Safe sequence:
+P1 P3 P4 P0 P2
+New requests can be entered now
+Enter the process number:1
+Entre the request of no of instances of resource R0:1
+Enter the request of no of instances of resource R1:0
+Enter the request of no of instances of resource R2:2
+System is in safe state
+Output-2:
+Enter the no.of process 3
+Enter the no.of resources 2
+Available instances of resources Ro :366
+Available instances of resources R1 :2
+For process P0
+Maximum instances required of resource
+R0-->7
+R1-->5
+No of instances allocated of resource
+R0-->3
+R1-->2
+No of instances required of resources
+R0-->4
+R1-->3
+For process P1
+Maximum instances required of resource
+R0-->6
+R1-->3
+No of instances allocated of resource
+R0-->4
+R1-->0
+No of instances required of resources
+R0-->2
+R1-->3
+For process P2
+Maximum instances required of resource67
+R0-->9
+R1-->2
+No of instances allocated of resource
+R0-->5
+R1-->1
+No of instances required of resources
+R0-->4
+R1-->3
+System is in unsafe state68
+Aim:Simulate Bankers Algorithm for Deadlock 
