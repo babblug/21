@@ -1,0 +1,116 @@
+AIM:
+Simulate the page replacement algorithm least-recently-used (LRU) algorithm
+DESCRIPTION:
+If an optimal algorithm is not feasible, perhaps an approximation of optimal 
+algorithm is possible. 
+The key distinction between the FIFO and OPT algorithms (other than looking 
+backward versus forward in time) is that the FIFO algorithm uses the time when a 
+page is to be used. If we use the recent past as an approximation of the near future, 
+then we can replace the page that has not been used for the longest period of time. 
+This approach is the least-recently-used algorithm (LRU).
+ LRU replacement associates with each page the time of that page’s last use. 
+When a page must be replaced, LRU chooses the page that has not been used for 
+the longest period of time. We can think of this strategy as the optimal pagereplacement algorithm looking backward in time, rather than forward. Like optimal 
+replacement, LRU replacement does not suffer from belady’s anamaly.
+ALGORITHM:
+1. Start
+2. read the number of frames, length of reference string and the reference string.
+3. for i from 0 to n do
+4. for j from 0 to f do84
+5.if p[j] is equal to r[i] then break the loop
+6.otherwise push r[i] into stack and increment count if top is less than (f1),increment top&insert page. Otherwise check the least recently used page in the 
+stack and replace it.
+7.print pages in the frames for each page in reference string and total number of 
+page faults.
+8.end.
+EXAMPLE:
+Let number of frames=4
+Reference string is 1 3 4 2 1 3 4 5 3 2 1 
+Total number of page faults=7
+LRU:
+#include<stdio.h>
+#include<stdlib.h>
+#define SIZE 10
+int n,f,*r,p[SIZE],top=-1,*counter,max=-1;
+void push(int);
+int main( )
+{
+int i,j,k,count=0;
+printf(“enter the number of frames\n”);
+scanf(“%d”,&f);
+printf(“enter the length of reference string\n”);
+scanf(“%d”,&n);85
+r=(int *)malloc(n*size of(int));
+printf(“enter the reference string\n”);
+for(i=0;i<n;i++)
+{
+scanf(“%d”,&r[i]);
+if(r[i]>max)max=r[i]);
+}
+counter=(int *)malloc(max*size of(int));
+for(i=0; i<=max;i++)
+counter[i]=99;
+for(i=0;i<f;i++)
+p[i]=-1;
+printf(“pages allocated in frames:\n\n”);
+for(i=0;i<n;i++)
+{
+counter[r[i]]=i;
+for(j=0;j=f;j++)
+if(p[j]==r[i])
+break;
+if(j==f)
+{
+push(r[i]);
+count++;86
+}
+printf(“\n%d\t-->”,r[i]);
+for(k=0;k<f;k++)
+printf(“%d\t”,p[k]);
+}
+printf(“\ntotal no of pagefaults:%d\n,”count);
+return 0;
+}
+void push(int s)
+{
+int i,j,min=999,minpos;
+if(top<(f-1))
+{
+p[++top]=s;
+return;
+}
+for(i=0;i<f;i++)
+{
+j=p[i];
+if(counter[j]<min)
+{
+min=counter[j];
+minpos=i;87
+}
+}
+p[minpos]=r;
+return;
+}
+Output:-
+Enter the no of frames
+3
+Enter the length of reference string
+12
+Enter the reference string
+1 2 3 2 4 3 2 1 5 3 4 2
+Pages allocated in frames:
+1-->1 -1-1
+2-->1 2 -1
+3-->1 2 3
+2-->1 2 3
+4-->4 2 3
+3-->4 2 3
+2-->4 2 3
+1-->1 2 3
+5-->1 2 588
+3-->1 3 5
+4-->4 3 5
+2-->4 3 2
+Total no of page faults:9
+Aim:
+simulate the page replacement algorithm o
