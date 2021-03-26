@@ -1,0 +1,209 @@
+AIM:
+ To simulate all file allocation strategies 
+(a)sequenced
+DESCRIPTION:
+ Sequenced as contingous allocation requires that each file occupy a set of 
+contingous blocks on the disk.When head movement is needed, the head need only 
+move from one track to the next.Thus the number of disk seeks required for 
+accessing contingously allocated files is minimal,as is seek time when a seek is 
+finally needed. 
+ Contingous allocation of a file is defined by the disk address and length of the 
+first block.If the file is defined by n blocks long and starts at location b,then it 
+occupies blocks b,b+1,b+2,.......,+n-1.The directory entry for each file indicates the 
+address of the starting block and the length of the area allocated for this 
+file.Accessing a file that has been allocated contingously is easy.For sequential 
+access,the file system remembers disk address of last block referenced and for 
+direct access to block 1 of a file the starts at block b,we can immediately access 
+block b+i.
+PROGRAM:
+#include<stdio.h>
+#include<stdlib.h>
+Int *disk, n, fsize, fno,p=-1,ef=0;
+Struct dir 
+{ 
+Int no ,start,length;
+}f[size];95
+Void insert();
+Void delete();
+Void traverse();
+Int main()
+{
+Int choice ch,i;
+Printf(“enter the number of blocks of disk\n”);
+Scanf(“%d”,&n);
+disk=(int*)malloc (n*size of (int));
+for(i=0;i<n;i++)disk[i]=-1;
+do
+{
+Printf(“enter your choice \n 1.create the file\n2.delete the 
+file\n3.traverse the file\n”);
+Scanf(“%d”,&choice);
+Switch(choice)
+{
+Case 1:insert();
+Break;
+Case 2:delete();
+Break;
+Case 3:traverse();
+Break;
+}
+Printf(“do you want to continue ?1 for yes,0 for no\n”);
+Scanf(“%d”,&ch);
+}
+While(ch!=0);
+For(i=0;i<n;i++)
+If(disk[i]==-1)ef++;
+Printf(“\n external fragmentation:%d\n”,ef);
+Return 0;
+}
+Void insert()
+{
+Int i,j,kr,count;
+For(i=0;i<=p;i++)
+{
+If (f[p].no==fno)
+{96
+Printf(“file f%d already inserted\n”);
+Return;
+}
+}
+Printf(“enter the size of %d:”,fno);
+Scanf(“%d”,&fsize);
+While(1)
+{
+For(j=0;j<n;j++)
+{
+Count=0;
+While(disk[j]==-1)
+{
+Count++;
+J++;
+}
+If(count>=fsize)
+Break;
+}
+If(count>=fsize)
+Break;
+}
+If(count<fsize)
+Break;
+R=rand()%n;
+For(j=r;j<r+fsize;j++)
+If (disk[j]!=-1)
+Break;
+If(j==r+fsize)
+{
+For(k=r;k<r+fsize;k++)
+Disk[k]=fno;
+Printf(“file f%d inserted at %d-%d\n”,fno,r,r+fsize-1);
+F[++p].no=fno;
+ F[p].start=r;
+F[p].length=fsize;
+Break;
+}
+}
+If((count<fsize)||(j!=r+fsize))97
+Printf(“file f%d cannot be inserted \n”,fno);
+Return;
+}
+Void delete()
+{
+Int i,j;
+For(i=0;i<=p;i++)
+{
+If(f[i].no==fno)
+{
+For(j=f[i].start;j<f[i].start+f[i].length;j++)
+Disk[j]=-1;
+for(j=0;j<p-1;j++)
+f[j]=f[j+1];
+p--;
+printf(“file %d deleted\n”,fno);
+break;
+}
+}
+If(i==p+1)
+Printf(“file f%d cannot be found\n”,fno);
+Return;
+}
+Void traverse()
+{
+Int i;
+For(i=0;i<=p;i++)
+If(f[i].no==fno)
+{
+Printf(“file f%d is located at %d to %d 
+\n”,fno,f[i].start,f[i].start+f[i].length-1);
+Break;
+}
+If(i==p+1)
+Printf(“file f%d cannot be found \n”,fno);
+Return;
+}
+OUTPUT:
+Enter the number of blocks of disk
+1298
+Enter file number
+1
+Enter your choice
+1.insert the file
+2.delete the file
+3.traverse the file
+1
+Enter size of file f1:4
+File f1 inserted at 7-10
+Do you want to continue?1 for yes,0 for no
+1
+Enter file number
+2
+Enter your choice 
+1.insert the file
+2.delete the file
+3.traverse the file
+1
+Enter size of file f2:3
+File f2 inserted at 0-2
+Do you want to continue?1 for yes,0 for no
+1
+Enter file number
+2
+Enter your choice 
+1.insert the file
+2.delete the file
+3.traverse the file
+Enter size of file f3:2
+File f3 inserted at 5-6
+Do you want to continue?1 for yes,0 for no
+1
+Enter file number
+4
+Enter your choice 
+1.insert the file
+2.delete the file
+3.traverse the file
+1
+Enter size of file f4:499
+File f4 cannot be inserted 
+Do you want to continue?1 for yes,0 for no
+1
+Enter file number
+2
+Enter your choice 
+1.insert the file
+2.delete the file
+3.traverse the file
+3
+File f2 is located at 0 to 2
+Do you want to continue?1 for yes,0 for no
+1
+Enter your choice 
+1.insert the file
+2.delete the file
+3.traverse the file
+2
+File f3 deleted
+Do you want to continue?1 for yes,0 for no
+0
+External fragmentation:5100
+Aim:
+Simulate the indexed fi
