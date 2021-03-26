@@ -1,0 +1,231 @@
+Aim:Simulate Bankers Algorithm for Deadlock Detection
+Deadlock Detection:
+If a system does not employ either a deadlock prevention or a deadlock avoidance 
+algorithm, then the deadlock situation may occurs in this environment, the system 
+may provide:
+⚫ An algorithm that examines the state of the system to determine whether a 
+deadlock has occured. 
+⚫ An algorithm to recover from the deadlock.
+The detection and recovery scheme requires overhead that includes not only the 
+run-time costs of maintaining the necessary information and executing the 
+deadlock algorithm but also the potential losses inherit in recovering from a 
+deadlock.
+Some of the data structures used in detection algorithm :
+⚫ Available: A vector of length m indicates the number of available resources of 
+each type.
+⚫ Allocation: An n x m matrix defines the number of resources of each type 
+currently allocated to each process.
+⚫ Request: An n x m matrix indicates the current request of each process .if 
+Request[i][j] equals k,then process pi is requesting k more instances of 
+resource type Rj69
+Detection Algorithm:
+1. Let work and finish be the vectors of length m and n respectively.initialize 
+a) Work = Available
+b) For I = 1..n if allocation of I != 0 then finish[i]=False otherwise True.
+2. Find an index I such that both 
+⚫ Finish[i]=False
+⚫ Request[i]<= work
+⚫ If no such I exists goto step 4
+3. work = work + allocation;
+⚫ Finish[i]=True
+⚫ Goto step 2
+4. If finish[i]=False for some 1<=I <= n the system is in deadlock state more over 
+if finsh[i]=False then pi is deadlock
+Example:
+Process Allocation Request Available
+A B C A B C A B C
+P0 0 1 0 0 0 0 0 0 0
+P1 2 0 0 2 0 2
+P2 3 0 3 0 0 170
+P3 2 1 1 1 0 0
+P4 0 0 2 0 0 2
+P0 -> finish(0)=false work= 0 0 0
+Request(0)<=work =>finish(0)=true
+P1 -> finish(1)=false 
+Request(1)>work
+P2 -> finish(2)=false 
+Request(2)>work
+P3 -> finish(3)=false 
+Request(3)>work
+P4 -> finish(4)=false 
+Request(4)>work
+P0->finish(0)=true
+P1 -> finish(1)=false 
+Request(1)>work
+There fore the system is in deadlock state although we can reclaim the resources 
+held by process p0,the no.of available resources is not sufficient to fulfill the 
+requests of other process 71
+Thus,a deadlock exists of consisting the process p1 to p4.
+Program:
+#include<stdio.h>
+#include<stdlib.h>
+#define size 10
+int m,n,available[size],allocation[size][size],request[size][size];
+void det_alg();
+int main()
+{
+ int i,j;
+ printf("enter the number of process\n");
+ scanf("%d",&n);
+ print("enter the number of resources\n");
+ scanf("%d",&m);
+ for(i=0;i<m;i++);
+ {
+ printf("'available' instances of resource R%d:",i);
+ scanf("%d",&available[i]);72
+ }
+ for(i=0;i<n;i++)
+ {
+ printf("\n FOR PROCESS P%d\n\n",i);
+ printf("no of instances 'allocated' of resource\n");
+ for(j=0;j<m;j++)
+ {
+ printf("\tR%d-->",j);
+ scanf("%d",&allocation[i][j]);
+ }
+ printf("Request to no of instances of resources\n");
+ for(j=0;j<m;j++)
+ {
+ printf("\tR%d-->",j);
+ scanf("%d",&request[i][j]);
+ }
+ }
+ det_alg();
+ return 0;
+}
+void det_alg()
+{73
+ int i,j,p,k,work[m],finish[n],a[n],t=0,s=20;
+ for (i=0;i<m;i++)
+ work[i]=available[i];
+ for(i=0;i<n;i++)
+ finish[i]=0;
+ do
+ {
+ for(i=0;i<n;i++)
+ {
+ if(finish[i]==0)
+ {
+ for(j=0;j<m;j++)
+ {
+ if(request[i][j]>work[j])
+ break;
+ }
+ if(j==m)
+ {
+ for(k=0;k<m;k++)
+ work[k]=work[k]+allocation[i][j];
+ finish[i]=1;
+ a[t++]=i;
+ }74
+ }
+ }
+ if((t==0)||(t==s)) goto step;
+ s=t;
+ }while(t!=n);
+ step:
+ for(i=0;i<n;i++)
+ if(finish[i]==0)
+ break;
+ if(i==n)
+ {
+ printf("\n\n System is in safe state\n");
+ printf("\nSafe sequence:\n");
+ for(k=0;k<n;k++){
+ printf("p%d\t",a[k]);
+ }
+ printf("\n\n");
+ }
+ else
+ {
+ printf("System is in deadlock state");
+ for(i=0;i<n;i++)
+ {75
+ if(finish[i]==0)
+ printf("%pd%d\t",i);
+ }
+ }
+ return;
+}
+OUTPUT:
+Ennter the no.of process : 5
+Enter the no of resources : 3
+Available instance of resource R0:0
+Available instance of resource R1:0
+Available instance of resource R2:0
+For process P0
+No of instances allocated of resource 
+R0-->0 
+R1-->1
+R2-->0
+Request no of instances of resources
+R0-->0
+R1-->0
+R2-->076
+For process P1
+No of instances allocated of resource 
+R0-->2
+R1-->0
+R2-->0
+Request no of instances of resources
+R0-->2
+R1-->0
+R2-->2
+For process P2
+No of instances allocated of resource 
+R0-->3 
+R1-->0
+R2-->3
+Request no of instances of resources
+R0-->0
+R1-->0
+R2-->1
+For process P3
+No of instances allocated of resource 77
+R0-->2 
+R1-->1
+R2-->1
+Request no of instances of resources
+R0-->1
+R1-->0
+R2-->0
+For process P4
+No of instances allocated of resource 
+R0-->0 
+R1-->0
+R2-->2
+Request no of instances of resources
+R0-->0
+R1-->0
+R2-->2
+System is in deadlock state consisting of processes:
+P1 p2 p3 p4
+OUTPUT -2 :
+Ennter the no.of process : 278
+Enter the no of resources : 2
+Available instance of resource R0:4
+Available instance of resource R1:3
+For process P0
+No of instances allocated of resource 
+R0-->2
+R1-->2
+Request no of instances of resources
+R0-->5
+R1-->1
+For process P1
+No of instances allocated of resource 
+R0-->3
+R1-->1
+Request no of instances of resources
+R0-->1
+R1-->2
+For process P2
+No of instances allocated of resource 
+R0-->079
+R1-->1
+Request no of instances of resources
+R0-->5
+R1-->3
+System is in safe state consisting of processes:
+P1 p2 p0
+AIM: S
