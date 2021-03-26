@@ -1,0 +1,117 @@
+First-Come-First-Serve scheduling(FCFS):
+FCFS also termed as First-Come-First-Out i.e., allocate the CPU in order 
+which the process arrive.When CPU is free ,it is allowed to process , which is 
+occupting the front end of the queue.This algorithm is non-preemptive.It is simple 
+to understand and code.Once the CPU has been allocated to a process , keeps the 
+CPU until it releases the CPU , either by terminated or by requesting I/O.It would 
+be disastrous to allow one process to keep the CPU for an extended period.
+Algorithm:
+Step 1 : start.
+Step 2 : read process name, arrival time and burst time.
+Step 3 : sort the processes based on their arrival times (since first arrived process 
+will execute first).
+Step 4 : If P[i-1].finish is greater than P[i].at 
+then P[i].st=p[i-1].ft
+otherwise,
+P[i].st=P[i].at
+Step 5 : P[i].ft=P[i].st+P[i].bt
+P[i].wt=P[i].st-P[i].at
+P[i].tt=P[i].bt+P[i].wt
+Step 6 : Repeat step 4 and step 5 until completion of all processes.
+Step 7 : end.19
+Example:
+Process Arrival 
+time
+Burst time Start 
+time
+Finish 
+time
+Turn around 
+time
+Waiting 
+time
+P1 0 4 0 4 4 0
+P2 1 3 4 7 6 3
+P3 2 1 7 8 6 5
+P4 3 2 8 10 7 5
+P5 4 5 10 15 11 6
+Gantt chart:
+ 
+Average Turn around time=(4+6+6+7+11)/5 = 34/5 =6.8
+Average Waiting time=(0+3+5+5+6)/5 = 19/5 =3.8
+Program:
+#include<stdio.h>
+#include<stdlib.h>
+#define size 20
+struct process{
+char name[10];
+int at,bt,st,ft,tt,wt;
+};
+struct process p[sie];
+int n;20
+void ready_queue(){
+struct process temp;
+int i,j;
+for(i=0;i<n-1;i++)
+for(j=i+1;j<n;j++)
+if(p[i].at>p[j].at){
+temp=p[i];
+p[i]=p[j];
+p[j]=temp;
+}
+}
+int main(){
+int avgtt=0,avgwt=0;
+int i;
+printf("\nenter number of processes");
+scanf("%d",&n);
+for(i=0;i<n;i++){
+printf("enter the name of process\n");
+scanf("%s",p[i].name);
+printf("enter arrival time and burst ime\n");
+scanf("%d%d",&p[i].at,&p[i].bt);
+}21
+ready_queue();
+for(i=0;i<n;i++){
+if((p[i-1].ft<p[i].at)||(i==0))
+p[i].st=p[i].at;
+else
+p[i].st=p[i-1].ft;
+p[i].ft=p[i].st+p[i].bt;
+p[i].wt=p[i].st-p[i].at;
+p[i].tt=p[i].bt+p[i].wt;
+}
+printf("\nexecution starts:\n");
+printf("Name\tArrival Time\tBurst Time\tStart Time\tFinish Time\tTurn Around 
+Time\tWaiting Time\n");
+for(i=0;i<n;i++){
+avgtt+=p[i].tt;
+avgwt+=p[i].wt;
+printf("%s\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n,p[i].name,p[i].at,p[i].bt,p[i]
+.st,p[i].ft,p[i].tt,p[i].wt");
+}
+printf("\nAverage Turnaround Time:%f",avgtt/(float)n);
+printf("\nAverage waiting Time:%f\n\n",avgwt/(float)n);
+return 0;
+}22
+OUTPUT:
+Enter number of processes:3
+Enter the name of processes:P1
+Enter arrival time and burst time: 0 10
+Enter the name of processes:P2
+Enter arrival time and burst time: 2 5
+Enter the name of processes:P3
+Enter arrival time and burst time: 4 6
+Enter the name of processes:P4
+Enter arrival time and burst time: 8 1
+Enter the name of processes:P5
+Enter arrival time and burst time: 2 5
+EXECUTION STARTS:
+Name Arrivaltime Bursttime Starttime Finishtime Turnaroundtime Waitingtime
+p1 0 10 0 10 10 0
+p2 2 5 10 15 13 8
+p3 4 6 15 21 17 11 
+Average Turnaround time:13.3333
+Average waiting time:6.3333323
+Priority scheduling:
+A Priority is associated
