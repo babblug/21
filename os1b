@@ -1,0 +1,139 @@
+B) Shortest job first (SJF):-
+in SJF scheduling algorithm , the process with minimum execution time or burst 
+time is executed first . when the cpu is available , it is assigned to the process that 
+has smallest next cpu burst .if the next cpu bursts of two processes are same ,FCFS 
+scheduling is used to break the tie .SJF is also termed as shortest- next- cpu-burst 
+algorithm because scheduling depends on the length of the next cpu burst of a 
+process rather than its total length
+Algorithm:-
+Step1: start 
+Step2: read no of processes , process name ,arrival time,burst time .
+Step3: sort the process based on their arrival times.
+Step4: now select the process having minimum burst time based on the 
+sequence in arrival 
+ Time.
+Step5: p[i].ft=p[i].st+p[i].bt
+ P[i].wt=p[i].st-p[i].at
+ P[i].tt=p[i].bt+p[i].wt 
+Step 6: Repeat this process until completion of all the process.
+Step 7:stop.
+Example:
+Process Arrival 
+time
+Burst time Start 
+time
+Finish 
+time
+Turn around 
+time
+Waiting 
+time
+P1 1 7 1 7 7 0
+P2 2 5 11 14 14 9
+P3 3 1 8 9 6 5
+P4 4 2 9 11 7 5
+P5 5 8 16 24 19 1113
+Gantt chart:
+Average turn around time = (7+14+6+7+19)/5 = 53/5 = 10.6
+Average waiting time = (0+9+5+5+11)/5 = 30/5 = 6 
+Program:
+#include<stdio.h>
+#include<stdlib.h>
+#define size 10
+struct process
+{
+char name[10];
+int at,bt,ft,tt,wt;
+};
+struct process p[size];
+int n;
+void ready_queue()
+{14
+struct process temp;
+int i,j;
+for(i=0;i<n-1;j++)
+if(p[i].at>p[j].at)
+{
+temp=p[i];
+p[i]=p[j];
+p[j]=temp;
+}
+}
+int main()
+{
+int avgtt=0,avgwt=0,minpos=0,i,j,k;
+struct process temp;
+printf("enter number of process\n");
+scanf("%d",&n);
+for(i=0;i<n;i++)
+{
+printf("enter the name");
+scanf("%s",p[i].name);
+printf("enter arrival time and brust time\n");
+scanf("%d%d",&p[i].at,&p[i].bt);
+}15
+for(i=0;i<n;i++)
+{
+if((p[i-1].ft<p[i].at)||(i==0))
+p[i].st=p[i].at;
+else
+{
+for(j=i+1;j<n;j++)
+{
+if(p[i-1].ft>=p[j].at)
+continue;
+else
+break;
+}
+minpos=i;
+for(k=i+1;k<j;k++)
+{
+if(p[minpos].bt>p[k].bt)
+minpos=k;
+}
+temp=p[i];
+p[i]=p[minpos];
+p[minpos]=temp;
+p[i].st=p[i-1].ft;16
+}
+p[i].ft=p[i].st+p[i].bt;
+p[i].wt=p[i].st-p[i].at;
+p[i].tt=p[i].bt+p[i].wt;
+}
+printf("\nexecution starts:\n");
+printf("name\tarrival time\tburst time\tstart time\tfinish time\tturnaround 
+time\twaiting time\n");
+for(i=0;i<n;i++)
+{
+avgtt+=p[i].tt;
+avgwt+=p[i].wt;
+printf("%s\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\t\t%d\n",
+p[i].name,p[i].at,p[i].bt,p[i].st,p[i].ft,p[i].tt,p[i].wt);
+}
+printf("\n average turnaround time:%f",avgtt/(float)n);
+printf("\n average waiting time:%f",avgwt/(float)n);
+return 0;
+}
+OUTPUT:
+Enter number of processes:5
+Enter the name of processes:P1
+Enter arrival time and burst time: 0 517
+Enter the name of processes:P2
+Enter arrival time and burst time: 6 1
+Enter the name of processes:P3
+Enter arrival time and burst time: 3 2
+Enter the name of processes:P4
+Enter arrival time and burst time: 8 1
+Enter the name of processes:P5
+Enter arrival time and burst time: 2 5
+EXECUTION STARTS:
+Name Arrivaltime Bursttime Starttime Finishtime Turnaroundtime Waitingtime
+p1 0 5 0 5 5 0
+p2 3 2 5 7 4 2 
+p3 6 1 7 8 2 1 
+p4 8 1 8 9 1 0
+p5 2 5 9 14 12 7
+Average Turnaround time:4.800000
+Average waiting time:2.00000018
+First-Come-First-Serve scheduling(FCFS):
+FCFS also termed as First-Come-First-Out i.
