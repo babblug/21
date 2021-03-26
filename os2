@@ -1,0 +1,80 @@
+AIM:
+Multiprogramming-Memory management-implementation of 
+fork(),wait(),exec() system calls
+DESCRIPTION:
+ System calls provide an interface to the services made available by an 
+operating system.These calls are generally available in routines written in C and 
+C++,although certain low level tasks may need to be written using assembly 
+language instructions.
+Fork():
+System call fork is used to create processes.It takes no arguments and returns 
+a process ID.The purpose of fork() is to create a new process,which becomes the 
+child process of the caller.after a new child process is created ,both processes will 
+execute the next instruction following the fork() system call.
+• If fork() returns a negative value,the creation child process was 
+unsuccessful.
+• Fork() returns a zero to the newly created child process.
+Fork() returns a positive value,the process ID of the child process to be 
+parent.
+Wait():
+The wait() function blocks the calling process until one of its child processes 
+exits or a signal is received.
+• If there are atleast one child processes running when the call to wait() is 
+made,the caller will be blocked until one of its child processes exits.
+Exec():
+The exec family of functions replaces the current running process with a 
+new process.it can be used to run a C program by using another C program.it 
+comes under the header file unistd.h.there are many members in the exec 
+family.execvp(),execv(),execlp(),execl(),exevpe(),execle().30
+Exit():
+When a process terminates it executes an exit() system call,either directly in 
+its code,or indirectly via library code.The prototype for exit() call is:
+Void exit(int status);
+The exit() system call has no return value as the process that calls it terminates and 
+so couldn’t receive a value anyway.
+PROGRAM:
+#include<stdio.h>
+#include<stdlib.>
+#include<sys/wait.h>
+#include<sys/types.h>
+Int main()
+{
+Pid_t cp;
+Cp=fork();
+If(cp<0)
+{
+Printf(“enter while creating the child process\n”);
+Exit(0);
+}
+Else if(cp==0)
+{
+Printf(“_________________________________________\n”);
+Printf(“child process is executing\n”);
+Printf(“child:My pid is %d \n”,getpid());
+Printf(“child:My parents pid is %d \n”,getppid());
+Execlp(“\bin\pwd”,”pwd”,0,0);
+Perror(“execlp() system call failure\n”);
+Printf(“________________________________________\n”);
+Else31
+{
+Printf(“parent executing\n”);
+Printf(“PROCESS ID: %d\n”,getpid());
+Printf(“parent waiting\n”);
+Wait(NULL);
+Printf(“____________________________________\n”);
+Printf(“child terminated\n”);
+Printf(“parent terminated\n”);
+}
+Return 0;
+}
+OUTPUT:
+Parent executing
+PROCESS ID:2569
+Parent waiting
+child process executing
+child:My pid is 2570
+child:My parent’s pid is 2569
+/home/16VV1A0526/OS_Lab
+Child terminated
+Parent terminated32
+Aim:- Simulate multiprogramming with fixed tas
