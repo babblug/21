@@ -1,0 +1,111 @@
+AIM: Stimulate all page replacement algorithms
+(a)first in first out(FIFO)
+DESCRIPTION:
+The simplest page replacement algorithm is a first in first out(FIFO) 
+algorithm. A FIFO replacement algorithm associates with each page the time when 
+that page was brought into memory. When a page must be replaced, the oldest 
+page is chosen. Notice that it is not strictly necessary to record the time when a 
+page is brought in. we can create a FIFO queue to hold all pages in memory. We 
+replace the page at head of queue. When a page is brought into memory, we insert 
+it at the tail of queue.
+In FIFO, Belady’s Anamoly might result in some cases i.e.,page fault rate 
+may increase as the number of allocated frames increases. We would expect that 
+giving morememory to a process would improve its performance. In some early 
+research, investigators noticed that this assumption was not always true.
+ALGORITHM:
+1. Start
+2.read the number of frames,length ofreference string and the reference string.
+3.for i from 0 to n do
+4.for j from 0 to f do
+5. if p[j] is equal to r[i],break the for loop 80
+6.push r[i] into stack and increment count
+7.print pages in frames for each page in reference string
+8.end
+EXAMPLE:
+Let the number of frames=3
+And reference string is 1 2 3 2 5 4 3 2 1 3
+1
+2
+Therefore, number of page faults=8
+(a)FIFO
+#include<stdio.h>
+#include<stdlib.h>
+#define size 10
+int n,f,*r,p[size],top=-1;
+void push(int);
+int main()
+{
+Iit i,j,k,count=0;
+printf(“enter the number of frames\n”);
+scanf(“%d”,&f);
+5
+2
+3
+5
+4
+3
+1
+1
+2
+3
+5
+4
+2
+1
+4
+2
+1
+3
+281
+printf(“enter length of reference string\n’);
+scanf(“%d”,&n);
+r=(int *)malloc(n*sizeof(int));
+printf(“enter reference string\n”);
+for(i=0;i<n;i++)
+scanf(“%d”,&r[i]);
+for(i=0;i<n;i++)
+{
+for(j=0;j<f;j++)
+{
+if(p[j]==r[i])
+break;
+}
+if(j==f)
+{
+push(r[i]);
+count++;
+}
+printf(“\n%d\t→”,r[i]);
+for(k=0;k<f;k++)
+printf(“%d\t”,p[k]);
+}
+printf(“\ntotal number of page faults:%d\n”,count);82
+return 0;
+}
+void push(int new)
+{
+if((top==-1)||(top==(f-1)))
+top=0;
+else top++;
+p[top]=new;
+}
+OUTPUT
+Enter the number of frames
+4
+Enter the length of reference string
+10
+Enter the reference string
+1 2 4 3 2 5 3 4 2 1
+1 → 1 -1 -1 -1
+2 → 1 2 -1 -1
+4 → 1 2 4 -1
+3 → 1 2 4 3
+2 → 1 2 4 3
+5 → 5 2 4 3
+3 → 5 2 4 383
+4 → 5 2 4 3
+2 → 5 2 4 3
+1 → 5 1 4 3
+Total number of page faults:6
+AIM:
+Simulate the page replac
