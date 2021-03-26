@@ -1,0 +1,86 @@
+Aim: 
+simulate multiprogramming with variable tasks.
+Description:
+Memory with variable tasks: (MVT):
+ In mvt, partitions are of variables length and number, processes are 
+allocated exactly as much memory as it is needed. The operating system keeps a 
+table indicating which parts of memory are available and which are occupied. 
+Initially all memory is available for user processes and is considered as one large 
+block of available memory, a hole. When a process arrives and needs memory, we 
+search for a hole large enough for this process. If we find one, we allocate only as 
+much memory as is needed, keeping the rest available to satisfy future requests.
+ In general, a set of holes of various sizes, is scattered throughout memory 
+at any given time when a process arrives and needs memory, the system searches 
+this set for a hole that is large enough for this process.if the hole is too large, it is 
+split into two:one part is allocated tp the arriving process;the other is returned. 
+to the set of holes.when a process terminates,it releases its block of memory,which 
+is then placed back in the set of holes.if the new hole is adjacent to other holes,these 
+adjacent holes are merged to form alarger hole.at this point,the system may need to 
+check whether these processes waiting for memory and whether this newly freed and 
+recombined memory could satisfy the demands of these any of these waiting 
+processes.this procedure is a particular instance of general dynamic storage 
+allocation problem.these are many solutions to this problem.the set of holes are 
+reached to determine which hole is best to allocate.
+First_fit :
+ Allocate the first hole that is big enough.searching from beginning of 
+memory,the one that fits to process is allocated.
+Best_fit :47
+ Allocate the smallest hole that is big enough.we must search entire 
+list,unless the list is ordered by size.
+Worst_fit :
+ Allocate the largest hole.again we must search the entire listunless it is sorted.
+These algorithms,however,suflet from external fragmentation.
+Program:
+#include<stdio.h>
+#include<conio.h>
+main()
+{
+int ms,mp[10],i, temp,n=0;
+char ch = 'y';
+clrscr();
+printf("\nEnter the total memory available (in Bytes)-- ");
+scanf("%d",&ms);
+temp=ms;
+for(i=0;ch=='y';i++,n++)
+{
+printf("\nEnter memory required for process %d (in Bytes) -- ",i+1);
+scanf("%d",&mp[i]);
+if(mp[i]<=temp)
+{
+printf("\nMemory is allocated for Process %d ",i+1);
+temp = temp - mp[i];
+}
+else
+{
+printf("\nMemory is Full");
+break;
+}48
+printf("\nDo you want to continue(y/n) -- ");
+scanf(" %c", &ch);
+}
+printf("\n\nTotal Memory Available -- %d", ms);
+printf("\n\n\tPROCESS\t\t MEMORY ALLOCATED ");
+for(i=0;i<n;i++)
+printf("\n \t%d\t\t%d",i+1,mp[i]);
+printf("\n\nTotal Memory Allocated is %d",ms-temp);
+printf("\nTotal External Fragmentation is %d",temp);
+getch();
+}
+INPUT
+Enter the total memory available (in Bytes) -- 1000
+Enter memory required for process 1 (in Bytes) -- 400
+Memory is allocated for Process 1
+Do you want to continue(y/n) -- y
+Enter memory required for process 2 (in Bytes) -- 275
+Memory is allocated for Process 2
+Do you want to continue(y/n) -- y
+Enter memory required for process 3 (in Bytes) -- 550
+OUTPUT
+Memory is Full
+Total Memory Available -- 1000
+PROCESS MEMORY-ALLOCATED
+1 400
+2 275
+Total Memory Allocated is 67549
+Total External Fragmentation is 325
+Aim: Simulate Bankers algorithm for deadlock avoidanc
