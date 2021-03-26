@@ -1,0 +1,217 @@
+Aim:
+Simulate the linked file allocation strategy.
+Description:
+Linked allocation solves all problems of contiguous allocation. With linked 
+allocation, each file is a linked list of blocks, the disk blocks may be scattered 
+anywhere on the disk. The directory contains a pointer to the first and last blocks 
+of the file. Each block contains a pointer to the next block. These pointers are not 
+made available to the user. Thus if each block is 512 bytes in size, and a disk 
+address requires 4 bytes, then the user sees blocks of 508 bytes.
+Linked allocation does have disadvantages however, the major problem is that it 
+can be used effectively only for sequential access files. To find the ith block of a 
+file, we must start at the beginning of that file and follow the pointers until we get 
+to the ith block. Each access to a pointer requires a disk read and some requires a 
+disk seek. Consequently, it is inefficient to support a direct access capability for 
+linked allocation files. Another disadvantage is the space required for the pointers.
+Program:
+#include<stdio.h>
+#include<stdlib.h>
+#define SIZE 10
+struct disk
+{
+ int file, next;
+}*block;
+int n, fsize, fno, P=-1,ef=0;109
+struct dir
+{
+ int no, start, end;
+} f[SIZE];
+void insert();
+void delete();
+void traverse();
+int main()
+{
+ int choice, ch, i;
+ printf(“Enter the number of blocks of disk\n”);
+ scanf(“%d” ,&n);
+ block=(struct disk *)malloc(n*sizeof(struct disk));
+ for(i=0;i<n;i++)
+ {
+ block[i].file=-1;
+ block[i].next=-1;
+ }
+do
+{
+ printf(“Enter file number\n”);
+ scanf(“%d”, &fno);
+ printf(“Enter your choice\n1. Insert the file\n2. Delete the file\n3. Traverse the 
+file\n”);
+ scanf(“%d”, &choice);
+ switch(choice)
+ {
+ case 1: insert();
+ break;
+ case 2: delete();
+ break;
+ case 3: traverse();
+ break;
+ }
+ printf(“Do you want to continue ? 1 for yes, 0 for no\n”);110
+ scanf(“%d”, &ch);
+}while(ch!=0);
+for(i=0;i<n;i++)
+if(block[i].file==-1)ef++;
+printf(“\nExternal fragmentation:%d\n”,ef);
+return 0;
+}
+void insert()
+{
+ int i, j, count=0, r, b=0, prev=-1;
+ for(i=0;i<=P;i++)
+ if(f[P].no==fno)
+ {
+ printf(“File f%d already inserted\n”);
+ return;
+ }
+ printf(“Enter the size of file f%d”,fno);
+ scanf(“%d”, &fsize);
+ while(1)
+ {
+ for(j=0;j<n;j++)
+if(block[j].file==-1) count++;
+ if(count<fsize) break;
+ r=rand()%n;
+ if(b==0)
+ {
+ f[++P].no=fno;
+ f[P].start=r;
+ }
+ if(block[r].file==-1)
+ {
+ block[r].file=fno;
+ block[prev].next=r;
+ prev=r;
+ printf(“%d alloted\n,r);111
+ b++;
+ }
+ if(b==fsize)
+ {
+ f[P].end=prev;
+ break;
+ }
+ }
+ if((b<size)||(count<fsize))
+printf(“file f%d cannot be inserted \n”,fno);
+ return;
+}
+void delete()
+{
+ int i, j, k;
+ for(i=0;i<=P;i++)
+ {
+ if(f[i].no==fno)
+ {
+for(j=f[i].start; block[j].next!=-1, j=k)
+{
+ block[j].file=-1;
+ k=block[j].next;
+}
+block[j].file=-1;
+for(j=1;j<P-1;j++)
+ f[j]=f[j+1];
+P--;
+printf(“File f%d deleted \n”,fno);
+break;
+ }
+ }
+ if(i==P+1)
+ printf(“File f%d cannot be found \n”,fno);112
+ return;
+}
+void traverse()
+{
+ int i, j;
+ for(i=0;i<=P;i++)
+ {
+ if(f[i].no==fno)
+ {
+printf(“File f%d is located at: \n”,fno);
+for(j=f[i].start;block[j].next!=-1;j=block[j].next);
+printf(“%d\n”,j);
+break;
+ }
+ }
+ if(i==P+1)
+ {
+ printf(“File f%d cannot be found \n”,fno);
+ }
+ return;
+}
+Output:
+Enter the number of blocks of disk:
+15
+Enter the number:
+1
+Enter your choice
+1. Create the file
+2. Delete the file
+3. Traverse the file
+1
+Enter the size of file f1:4
+13 alloted113
+1 alloted
+12 alloted
+10 alloted
+Do you want to continue ? 1 for yes, 0 for no
+1
+Enter file number:
+2
+Enter your choice 
+1. Create the file
+2. Delete the file
+3. Traverse the file
+1
+Enter the size of file f2:3
+8 alloted
+9 alloted
+2 alloted
+Do you want to continue ? 1 for yes, 0 for no
+1
+Enter the number:
+3
+Enter your choice
+1. Create the file
+2. Delete the file
+3. Traverse the file
+1
+Enter the size of file f3:4
+7 alloted
+5 alloted
+4 alloted
+0 alloted
+Do you want to continue ? 1 for yes, 0 for no
+1
+Enter file number:
+2
+Enter your choice114
+1. Create the file
+2. Delete the file
+3. Traverse the file
+3
+File f2 is located at
+8->9->2
+Do you want to continue ? 1 for yes, 0 for no
+1
+Enter file number:
+1
+Enter your choice
+1. Create the file
+2. Delete the file
+3. Traverse the file
+2
+File f1 deleted
+Do you want to continue ? 1 for yes, 0 for no
+0
+External fragmentation:8115
+UNIX 
+progr
