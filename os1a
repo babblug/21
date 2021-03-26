@@ -1,0 +1,174 @@
+Aim: Simulate the following CPU scheduling Algorithms 
+(a)Round Robin (b)SJF (c)Priority
+Whenever CPU becomes idle, the operating system must select one of the 
+processes in the ready queue to be executed . The selection process is carried out 
+by the short term scheduler or CPU scheduler .The scheduler select a process from 
+processor in memory that are ready to execute and allocates the CPU that process. 
+The records in queues are generally process contol block(PCBS) of processes.
+CPU scheduling criteria:-
+Different CPU scheduling algorithms have different properties, and the chance of 
+particular algorithm may favor one class of processes over another many criteria 
+have been suggested for comparing CPU scheduling algorithms. The criteria 
+include the following :
+CPU Utilization:
+We want to keep the CPU as possible as possible. Conceptually CPU 
+utilization can range from 0 to 100% In a real system, it should range from 
+40%(for a lightly loaded system) to 90%(for a heavily used system)
+Throughput:
+If the CPU is busy executing processes, then work is being done. One 
+measure of work is the no. of processes that are completed per time unit, called 
+throughput.
+Turnaround time:
+The interval from the time of submission of a process to the time of 
+completion is the turnaround time.
+Waiting time:
+It is the sum of the periods spent waiting in ready queue.6
+Response time:
+The amount of time it takes from when a request was submitted until the 
+first response is produced not output.
+It is desirable to maximize CPU Utilization and throughput and to minimize 
+turnaround time ,waiting time and response time .
+A) Round-Robin Scheduling:-
+The Round- Robin(RR) scheduling algorithm is designed especially for time 
+sharing systems . it is similar to FCFS scheduling but preemption is called a time 
+quantum or time slice is defined .A small uint of time called a time quantum or 
+time slice is defined . A time quantum is generally from 10 to 100 millisceconds 
+.the ready queue is treated as circular queue . In this the CPUscheduler pics the 
+first process from the ready queue sets a timer to interrupt after 1 time quantum 
+and dispatches the process.
+Algorithm:
+Step 1: start
+Step 2: read process name , no of processors, arrival time, burst time and time 
+quantum.
+Step 3 : based on the arrival time , select the process first arrived
+Step 4 : if p[ min].rb >2
+ Then p [min ].ra=p[min].ra +time quantum
+ P[min].rb=p[min].rb-time quantum
+Step 5: if p[min].rb id 0 then 
+ Increment count variable by 1
+ P[min].ft= time quantum + flag
+ P[min].wt=p[min].ft-p[min].at-p[min].bt
+ P[min].tt=p[min].wt+p[min].bt7
+Step 6: repeat unit count is equal to n 
+Step 7: end
+Example :- time quantum=2
+process Arrival time Burst time Finish time Turn 
+around time
+Waiting 
+time
+P1 1 4 8 8 4
+P2 2 5 18 17 12
+P3 3 2 6 4 2
+P4 4 1 9 6 5
+P5 5 6 21 17 11
+P6 6 3 19 13 10
+ 
+Gantt chart
+P1 P2 P3 P1 P4 P5 P2 P6 P5 P2 P6 P5
+0 2 4 6 8 9 11 13 15 17 
+18 19 21
+Average turn around time = (8+17+4+6+17+13)/6 =10.8333
+Average waiting time = (4+12+2+5+ 11+10)/6=7.333
+Program:
+#include<stdio.h>
+#define size 20
+Struct process
+{ char name [10]; 
+Int at, bt,ft,tt,wt,ra,rb,c;
+} p[size];
+Int main()
+{ int n ,avgtt=0,avgwt=0;
+Int I,time , min, count=0.2,flag=0;
+Printf(“enter the number of processes\n”);
+Scanf(“%d”,&n);8
+Printf(“enter time quantum\n”);
+Scanf(“%d”,&2);
+For(i=0;i<n;i++)
+{ printf (“enter the name of process\n”);
+ Scanf (“%s”,p[i].name);
+ Printf(“enter arrival time and burst time\n”);
+ Scanf(“%d%d”,&p[i].at,&p[i].bt);
+ P[i].ra=p[i].at;
+ P[i].rb=p[i].bt;
+} 
+Flag=0;
+P[19].ra=9999;
+for(time=0;count!=n;time=time+flag)
+{
+min=19;
+for(i=0;i<n;i++)
+if((p[i].ra<=time|&&(p[i].ra<=p[min].ra)&&(p[i].rb>0))
+{
+If(p[i].ra==p[min].ra)
+If(p[i].c<p[min].c)
+Min=I;
+Else
+Min=I;
+}9
+If(min==19)
+{
+Flag=1;
+Continue;
+}
+If(p[min].rb>2)
+{
+P[min].ra=p[min].ra+2;
+P[min].rb=p[min].rb-2;
+P[min].c++;
+Flag=2;
+}
+Else if(p[min].rb<=2)
+{
+Flag=p[min].rb;
+P[min].rb=0;
+}
+If (p[min].rb==0)
+{ count ++;
+P[min].ft=time+flag;
+P[min].wt=p[min].ft+p[min].at-p[min].bt;
+P[min].tt=p[min].wt+p[min].bt;
+}10
+}
+Printf(“\n execution starts:\n”);
+Printf(“name\t arrival time \t burst time\t finish time\t turn around time \t waiting 
+time \n”);
+For(i=0;i<n;i++)
+{ 
+ Avgtt+=p[i].tt;
+ Avgtt =p[i].wt;
+ Printf(“%s|t|t%d|t|t%d|t|t%d|t|t%d\n”,p[i].name,
+ P[i].at,p[i].bt,p[i].ft,p[i].tt,p[i].wt);
+}
+Printf(“\n average turn around time :%f”,avgt/(float)n);
+Printf(“\n average waiting time :%f”,avgwt/(float)n);
+Return 0 ;
+}
+Output:
+Enter the no.of processes: 5
+Enter the time quantum : 3
+Enter the name of process:p1
+Enter the arrival time and burst time:2 2
+Enter the name of process:p211
+Enter the arrival time and burst time:5 6
+Enter the name of process:p3
+Enter the arrival time and burst time:12 7
+Enter the name of process:p4
+Enter the arrival time and burst time:8 8
+Enter the name of process:p5
+Enter the arrival time and burst time:1 1
+Ececution starts:
+Name Arrival 
+time
+Burst time Finish time Turn around 
+time
+Waitind 
+time
+P1 2 2 4 2 0
+P2 5 6 14 9 3
+P3 12 7 26 14 7
+P4 8 8 22 14 6
+P5 1 1 2 1 0
+Average turn around time:8.00
+Average waiting time:3.2012
+B) Shortest job first (SJF):-
+in SJF scheduling algorithm , the
