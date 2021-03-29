@@ -48,3 +48,8 @@
       printf("\nTotal Page Faults:\t%d\n", page_faults);
       return 0;
 }
+Output
+Pages 5
+4 1 2 4 5 
+frames 3
+page faults 4
