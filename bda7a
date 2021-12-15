@@ -1,0 +1,35 @@
+AIM: Explain the steps of Hive Installation  and Hive Modes of Execution
+ 
+DESCRIPTION:
+
+1.Installation :
+ Install jdk version using this command (because hive works with java 8 version only)
+sudo apt-get install openjdk-8-jdk
+set environment variables in .bashrc file
+Download hive-3.1.2 file from https://downloads.apache.org/hive/hive-3.1.2/
+Extract the file using this command
+tar xf apache-hive-3.1.2-bin.tar.gz
+set environment variables in .bashrc file
+nano .bashrc
+source .bashrc
+create below files
+sudo mkdir /user/
+sudo mkdir /user/hive
+sudo mkdir /user/hive/warehouse
+Change permissions 
+sudo chmod 777 -R /user/hive/warehouse/
+Initiating Apache Derby Schema after downloading and extracting files
+hive/home/bin/schematool -dbTYpe derby -initSchema
+
+2. Hive Modes Of Execution:
+    Depending on the size of Hadoop data nodes, Hive can operate in two different modes:
+Local mode
+Map-reduce mode
+Use Local mode when:
+Hadoop is installed under the pseudo mode, possessing only one data node
+The data size is smaller and limited to a single local machine
+Users expect faster processing because the local machine contains smaller datasets.
+Use Map Reduce mode when:    
+Hadoop has multiple data nodes, and the data is distributed across these different nodes
+Users must deal with more massive data sets
+
