@@ -1,0 +1,133 @@
+AIM:  Write a map reduce program for finding the number of movies in each genre whose rating is greater than three. 
+SOURCE CODE:
+MoviesMapper1:
+import java.io.IOException;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MoviesMapper1 extends Mapper<LongWritable, Text, IntWritable, Text> {
+
+    public void map(LongWritable ikey, Text ivalue, Context context)
+            throws IOException, InterruptedException {
+        
+        String line= ivalue.toString();
+        String [] tokens = line.split(",");
+               if(tokens[0].charAt(0) != 'u')
+               {
+               Integer movieId = Integer.parseInt(tokens[1]);
+               Double rating = Double.parseDouble(tokens[2]);
+               if(rating>3.0){
+               context.write(new IntWritable(movieId),new Text(""));
+        }
+        }
+
+    }
+
+}
+
+MoviesMapper2:
+import java.io.IOException;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class MoviesMapper2 extends Mapper<LongWritable, Text, IntWritable, Text> {
+
+    public void map(LongWritable ikey, Text ivalue, Context context)
+            throws IOException, InterruptedException {
+        
+        String line= ivalue.toString();
+        String [] tokens = line.split(",");
+               if(tokens[0].charAt(0) != 'm')
+               {
+               Integer movieId = Integer.parseInt(tokens[0]);
+               String genre = tokens[2];
+               context.write(new IntWritable(movieId),new Text(genre));
+        }
+        
+
+    }
+
+}
+MoviesReducer:
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class MoviesReducer extends Reducer<IntWritable,DoubleWritable, Text, DoubleWritable> {
+
+    public void reduce(Text _key, Iterable<DoubleWritable> values, Context context)
+            throws IOException, InterruptedException {
+        // process values
+        double sum=0;
+        double count=0;
+        DoubleWritable rat=new DoubleWritable(3);
+        for (DoubleWritable val : values) {
+                        
+                        count+=1;
+                        
+                        }
+                 context.write(_key,new DoubleWritable(count));
+             
+        }
+        
+    }
+
+
+MoviesDriver:
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class MoviesDriver {
+
+    public static void main(String[] args) throws Exception {
+        Configuration conf = new Configuration();
+        
+        Job job = Job.getInstance(conf, "movies");
+        job.setJarByClass(MoviesDriver.class);
+        // TODO: specify a mapper
+        job.setMapperClass(MoviesMapper1.class);
+        job.setMapperClass(MoviesMapper2.class);
+        // TODO: specify a reducer
+        job.setReducerClass(MoviesReducer.class);
+        
+        
+        MultipleInputs.addInputPath(job,new Path(args[0]),TextInputFormat.class,MoviesMapper1.class);
+        
+        MultipleInputs.addInputPath(job,new Path(args[1]),TextInputFormat.class,MoviesMapper2.class);
+        
+                job.setOutputKeyClass(IntWritable.class);
+        job.setOutputValueClass(DoubleWritable.class);
+
+        // TODO: specify output types
+        job.setMapOutputKeyClass(IntWritable.class);
+        job.setMapOutputValueClass(Text.class);
+        
+        
+
+        // TODO: specify input and output DIRECTORIES (not files)
+        //FileInputFormat.setInputPaths(job, new Path(args[0]));
+        //FileInputFormat.setInputPaths(job, new Path(args[1]));
+        FileOutputFormat.setOutputPath(job, new Path(args[2]));
+        if (!job.waitForCompletion(true))
+            return;
+    }
+
+}
+Output:
