@@ -1,0 +1,73 @@
+AIM:
+Write the following Pig Scripts on Structured Data
+
+Let us consider the input record format as Emp(name, age, dept, salary)
+i) Find names of all employees whose is age is less than 36 and greater than
+25
+ii) Find the number of employees in each department
+iii) Find the number of employee whose salary is greater 40000 and name starts
+With ‘p’
+iv) Find the number of employees whose salary is greater than the average salary
+of all employees
+
+INPUT TEXT DATA:
+Emp.txt
+Balu,25,it,100000
+meera,30,sales,50000
+sai,45,business,25000
+edukondalu,20,sales,90000
+laskhman,34,business,50000
+raghav,45,it,60000
+jagadeesh,22,it,500000
+chandu,49,sales,40000
+rakesh,35,sales,400000
+vijay,28,business,500000
+
+
+
+
+i) Find names of all employees whose is age is less than 36 and greater than 25
+
+SCRIPT:
+lines = LOAD 'Emp.csv' USING PigStorage(',') as (name:chararray, age:int, dept:chararray, salary:long);
+temprec = FILTER lines BY age >25 and age <36;
+DUMP temprec;
+
+OUTPUT:
+
+
+ii) Find the number of employees in each department
+SCRIPT:
+lines = LOAD 'Emp.csv' USING PigStorage(',') as (name:chararray, age:int, dept:chararray, salary:long);
+deptgrp = GROUP lines BY dept;
+numofemployees = FOREACH deptgrp GENERATE $0, COUNT($1);
+DUMP numofemployees;
+
+
+
+OUTPUT:
+
+
+iii) Find the number of employee whose salary is greater 40000 and name starts with ‘p’
+SCRIPT:
+lines = LOAD 'Emp.csv' USING PigStorage(',') as (name:chararray, age:int, dept:chararray, salary:long);
+slf = FILTER lines BY $3>40000 AND STARTSWITH($0,’j’);
+grouping = GROUP slf ALL;
+res = FOREACH grouping GENERATE COUNT($1);
+DUMP res;
+
+OUTPUT:
+
+
+iv) Find the number of employees whose salary is greater than the average salary of all employees
+
+SCRIPT:
+lines = LOAD 'Emp.csv' USING PigStorage(',') as (name:chararray, age:int, dept:chararray, salary:long);
+grouped = GROUP lines ALL;
+avgsal = FOREACH grouped  GENERATE AVG(lines.salary) as (a:long);
+temp= FILTER lines BY salary>avgsal.a;
+grp = GROUP temp ALL;
+res = FOREACH grp GENERATE COUNT($1);
+DUMP res;
+
+OUTPUT:
