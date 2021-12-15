@@ -1,0 +1,227 @@
+AIM: Write an example JAVA program for demonstrating generic class with two type parameter. 
+
+
+PROGRAM:
+
+public class Twotypeparameter<T,V>
+ {
+T t1; 
+V t2; 
+public void method(T t1,V t2)
+{
+this.t1=t1; 
+this.t2=t2; 
+System.out.println(t1);
+System.out.println(t2);
+}
+
+    
+public static void main(String[] args)
+{
+
+Twotypeparameter<Integer,String> ob1=new Twotypeparameter<>();
+ob1.method(12,”Balu");
+ob1.method(10,"Bonam");
+
+}
+}
+
+
+
+
+
+
+
+Output:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPERIMENT-1(C)
+AIM: Write an example JAVA program for demonstrating generic class with bounded type parameter.
+
+ SYNTAX: 
+<T extends B1 & B2 & B3>
+
+Program: 
+
+class Bound<T extends Car>
+{
+private T objRef;
+public Bound(T obj)
+{
+this.objRef = obj;
+}
+
+public void doRunTest()
+{
+this.objRef.Vehicle();
+}
+
+}
+
+class Car
+{
+public void Vehicle()
+{
+System.out.println("Vehicle Type: Car");
+}
+}
+
+
+class B MW extends Car
+{
+public void Vehicle()
+{
+System.out.println("BMW");
+}
+}
+
+
+class Ford extends Car
+{
+public void Vehicle()
+{
+System.out.println("Ford");
+}
+}
+
+
+public class BoundedClass
+{
+public static void main(String a[])
+{
+Bound<Ford> ob1 = new Bound<Ford>(new Ford());
+ob1.doRunTest();
+Bound<BMW> ob2 = new Bound<BMW>(new BMW());
+ob2.doRunTest();
+Bound<Car> ob3 = new Bound<Car>(new Car());
+ob3.doRunTest();
+}
+} 
+
+
+Output:
+
+
+
+
+
+EXPERIMENT-1(D)
+AIM: Write an example JAVA program for demonstrating generic class with bounded type parameter.
+SYNTAX: 
+The syntax for a generic method includes a list of type parameters, inside angle 
+brackets, which appears before the method's return type 
+Return Type <Type Parameter> Method Name(<List of Parameters>)
+
+PROGRAM:
+
+import java.util.*; 
+public class GenericMethod
+{
+
+public static <T>
+boolean compare(T v1, T v2)
+{
+return v1.equals(v2);
+} 
+public static <T extends Number>
+T getValue(T v1)
+{
+return v1; 
+} 
+
+public static void main(String args[])
+{
+Integer ia=90; 
+Integer ib=60; 
+booleanbv= GenericMethod.<Integer>compare(ia,ib);
+System.out.println(bv);
+Double da=18.9;
+Double db=27.9;
+bv= GenericMethod.compare(da,db);
+System.out.println(bv);
+Integer ic = getValue(ia)+getValue(ib);
+System.out.println(ic);
+}
+} 
+
+
+
+
+
+
+OUTPUT:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              
+
+
+                               EXPERIMENT-1(E)
+
+AIM: Write an example JAVA program for demonstrating generic class with wildcard arguments.
+
+SYNTAX: 
+<superLowerBound>
+
+PROGRAM: 
+importjava.util.ArrayList;
+importjava.util.Arrays; 
+importjava.util.Collection;
+importjava.util.List; 
+importjava.util.Iterator; 
+public class WildCard
+{
+
+public static void sampleMethod(Collection<? super Integer> col)
+{
+Iterator it = col.iterator();while (it.hasNext()) 
+{ 
+System.out.print(it.next()+"");
+}
+System.out.println("");
+}
+
+public static void main(String args[]) 
+{
+ArrayList<Integer> col1 = new ArrayList<Integer>(); 
+col1.add(91); 
+col1.add(76); 
+col1.add(34); 
+col1.add(89); 
+col1.add(33); 
+sampleMethod(col1); 
+List<Object> col2 = Arrays.asList(62.1f, 5.32f, 56.4f, 82.7f, 95.4f, 625.f);
+sampleMethod(col2);
+}
+} 
+
