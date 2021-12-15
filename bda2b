@@ -1,0 +1,25 @@
+Java LinkedList class uses a doubly list to store the elements .It provides a 
+linked l ist data structure.It inherits the AbstractList class and implements List 
+andDeque interfaces.java Linkedlist class maintains insertion order.java 
+LinkedList class is non synchronized.
+
+
+PROGRAM:
+
+import java.util.LinkedList;
+public class LinkedListExample
+ {
+public static void main(String args[])
+{
+LinkedList<String>llg = new LinkedList<>();
+llg.add("IV Year");
+llg.add("UCEV");
+llg.add(1, "CSE");
+System.out.println(llg);
+llg.remove(1);
+System.out.println("After remove at index 1 " + llg);
+llg.remove("UCEV");
+System.out.println("After the remove object " + llg);
+    }
+}
+
