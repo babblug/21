@@ -1,0 +1,35 @@
+1a
+Class Box<T>{
+//T type 
+private T t; 
+public void set(T t)
+{ 
+this.t=t;
+} 
+public T get()
+{
+return t;
+}
+}
+
+
+PROGRAM:
+
+public class Onetypeparameter<T>
+{
+T t; 
+public void method(T t)
+{
+this.t=t; 
+System.out.println(t); 
+}
+
+
+public static void main(String[] args)
+    {
+
+Onetypeparameter<Integer>ot=new Onetypeparameter<>();
+ot.method(64);
+    
+}
+}
