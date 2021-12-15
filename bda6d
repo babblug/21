@@ -1,0 +1,104 @@
+AIM:
+Write the following Pig Scripts Based on Joins
+
+Let us consider two schemas users(name,age) and pages(name, url, date)
+i) Find the ages of all users who visited “www.bannedsite.com” (include website of
+Your own choice)
+ii) Find the top5 most visited websites by users aged between 18 to 36.
+iii) Find the names of all users who visited “www.bannedsite.com” in October
+
+INPUT TEXT DATA:
+Stud1.txt:
+Meera,20
+Sai,21
+Balu,21
+Lakshman,22
+Edukondalu,21
+Jagadish,22
+Raghavendra,21
+Chandu,21
+Rayudu,25
+Mohan,37
+Ravi,29
+Seshu,40
+Mahesh,50
+Swamy,25
+Naidu,35
+Saadhiqh,33
+
+Stud2.txt:
+Meera,www.geeksforgeeks.com,2020-10-05
+Sai,www.google.com,2017-09-20
+Balu,www.facebook.com,2018-10-29
+Lakshman,www.geeksforgeeks.com,2019-07-04
+Edukondalu,www.geeksforgeeks.com,2021-10-17
+Jagadish,www.flipkart.com,2015-03-23
+Raghavendra,www.geeksforgeeks.com,2020-10-05
+Chandu,www.bannedsites.com,2016-05-18
+Rayudu,www.instagram.com,2018-04-29
+Mohan,www.flipkart.com,2020-10-28
+Ravi,www.netfix.com,2020-03-23
+Seshu,www.amazon.com,2020-05-07
+Mahesh,www.google.com,2019-08-15
+Swamy,www.geeksforgeeks.com,2020-04-25
+Naidu,www.facebook.com,2020-10-27
+Saadhiq,wwww.tutorialspoint.com,2020-10-17
+Sai,www.w3schools.com,2021-10-18
+Meera,www.facebook.com,2018-09-14
+Balu,www.swiggy.com,2020-06-26
+Lakshman,www.netfix.com,2020-08-08
+Raghavendra,www.bannedsites.com,2019-05-29
+Mohan,www.geeksforgeeks.com,2019-09-20
+Ravi,www.javatpoint.com,2020-09-19
+Seshu,www.w3schools.com,2020-07-16
+Swamy,www.google.com,2020-02-29
+Ravi,www.facebook.com,2020-03-23
+Jagadish,www.geeksforgeeks.com,2020-11-14
+Rayudu,www.facebook.com,2020-10-31
+Mohan,www.amazon.com,2020-09-10
+Sai,www.geeksforgeeks.com,2021-03-23
+
+i) Find the ages of all users who visited “www.bannedsite.com” (include website of your own choice)
+Considering the url : www.facebook.com
+
+SCRIPT:
+names = LOAD 'names.csv' USING PigStorage(',') as (name:chararray, age:int);
+pages = LOAD 'pages.csv' USING PigStorage(',') as (name:chararray, url:chararray, date:datetime);
+joindata = JOIN names BY name, pages BY name;
+temp = FILTER joindata BY url==’www.facebook.com’;
+bannedage = FOREACH temp generate age;
+dump bannedage;
+
+OUTPUT:
+
+
+ii) Find the top5 most visited websites by users aged between 18 to 36.
+
+SCRIPT:
+names = LOAD 'names.csv' USING PigStorage(',') as (name:chararray, age:int);
+pages = LOAD 'pages.csv' USING PigStorage(',') as (name:chararray, url:chararray, date:datetime);
+joindata = JOIN stud1 BY name, pages BY name;
+majors = FILTER joindata BY age>18 AND age<36;
+mjurl = group majors BY url;
+mjc = FOREACH mjurl generate group.COUNT_STAR($1);
+temp = ORDER mjc BY $1 DESC;
+top5 = LIMIT temp 5;
+
+OUTPUT:
+
+
+
+iii) Find the names of all users who visited “www.bannedsite.com” in October
+Considering the url : www.facebook.com
+
+SCRIPT:
+names = LOAD 'names.csv' USING PigStorage(',') as (name:chararray, age:int);
+pages = LOAD 'pages.csv' USING PigStorage(',') as (name:chararray, url:chararray, date:datetime);
+joindata = JOIN names BY name, pages BY name;
+temp = FILTER joindata BY url==’www.facebook.com’;
+temp2 = FOREACH temp GENERATE $0,$4;
+octgrp = FILTER temp2 BY GetMonth($1)==10 AS;
+res = FOREACH octgrp generate $0;
+dump octgrp;
+
+OUTPUT:
