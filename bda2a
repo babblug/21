@@ -1,0 +1,92 @@
+AIM: Write an example JAVA program for demonstrating ArrayList and LinkedList classes.
+
+i)ArrayList:
+
+DESCRIPTION:
+ArrayList is a part of collection framework and is present in java.util
+package. It provides us with dynamic arrays in Java.
+ArrayList is initialized by the size. However, the size is increased automatically if the collection grows or shrinks if the objects are removed from the collection.
+Java ArrayList allows us to randomly access the list.ArrayListcan not be used for primitive types, like int, char, etc. 
+We Need a wrapper classes for such cases.
+
+PROGRAM:
+
+importjava.util.ArrayList;
+importjava.util.Iterator;
+public class ArrayListExample
+{
+
+public static void main(String args[])
+{
+ArrayList<Integer>ilist = new ArrayList<Integer>();
+ilist.add(15);
+ilist.add(1,18);
+ilist.add(46);
+System.out.println(ilist);
+ilist.set(2,515);
+System.out.println(ilist);
+System.out.println(ilist.get(2));
+int sum=0;
+
+for(Integerelem:ilist)
+sum=sum+elem;
+
+System.out.println(sum);
+ArrayList<String>slist=new ArrayList<String>();
+slist.add("IV");
+slist.add("Year");
+slist.add("Students");
+slist.add("CSE");
+System.out.println(slist); 
+}
+ }
+
+
+
+OUTPUT:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ii)LinkedList: 
+Java LinkedList class uses a doubly list to store the elements .It provides a 
+linked l ist data structure.It inherits the AbstractList class and implements List 
+andDeque interfaces.java Linkedlist class maintains insertion order.java 
+LinkedList class is non synchronized.
+
+
+PROGRAM:
+
+import java.util.LinkedList;
+public class LinkedListExample
+ {
+public static void main(String args[])
+{
+LinkedList<String>llg = new LinkedList<>();
+llg.add("IV Year");
+llg.add("UCEV");
+llg.add(1, "CSE");
+System.out.println(llg);
+llg.remove(1);
+System.out.println("After remove at index 1 " + llg);
+llg.remove("UCEV");
+System.out.println("After the remove object " + llg);
+    }
+}
