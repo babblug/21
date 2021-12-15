@@ -1,25 +1,144 @@
-Java LinkedList class uses a doubly list to store the elements .It provides a 
-linked l ist data structure.It inherits the AbstractList class and implements List 
-andDeque interfaces.java Linkedlist class maintains insertion order.java 
-LinkedList class is non synchronized.
+EXPERIMENT-2(B)
+AIM:To implement the JAVA program for demonstrating HashMap, 
+LinkedHashMap and TreeMapclasses .
+
+i)HashMap:
+
+HashMap<K,V>is a part of java collection is a part of the 
+java’s collection since java 1.2.This class is found njava.util.package.
+It provides the basic implementation of the map interface of java.
+It stores the data in(key,value)pairs,and you can access them by an index of another type.
+One object is used as a key to another object(value).if you try to insert the duplicate key,it will replace the element of the corresponding key .
 
 
 PROGRAM:
+importjava.util.HashMap;
+public class HashMapExample
+{
 
-import java.util.LinkedList;
-public class LinkedListExample
+public static void main(String[] args)
+{
+    HashMap<String, Integer> map = new HashMap<>();
+map.put("jntuk", 11);
+map.put("ucev", 33);
+map.put("cse", 22);
+System.out.println("Size of map is:- "+ map.size());
+System.out.println(map);
+if (map.containsKey("ucev")) 
+{
+Integer a = map.get("ucev");
+System.out.println("value for key"+ "ucev is:- " + a);
+}
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Output:
+
+
+
+
+
+
+
+ii)LinkedHashMap: 
+
+Linkedhashmap uses hashing for storing key.it also uses the linked data structures.
+LinkedHashMap is a Hash table and linked list implementation of the Map interface, with predictable iteration order. This implementation differs from HashMap in that it maintains a doubly-linked list running through all of its entries.
+The Major Difference between the HashMap and LinkedHashMap is the ordering of the elements. The LinkedHashMap provides a way to order and trace the elements. The HashMap extends AbstractMap class and implements Map interface, whereas the LinkedHashMap extends HashMap class and implements Map interface.
+LinkedHashMap can be used to maintain insertion order, on which keys are inserted into Map or it can also be used to maintain an access order, on which keys are accessed. This provides LinkedHashMap an edge over HashMap without compromising too much performance.
+PROGRAM:
+importjava.util.*; 
+class Book
+{
+int id;
+ String name,author,publisher; 
+int quantity; 
+public Book(int id, String name, String author, String publisher, intquantity)
  {
+ this.id = id; 
+this.name = name;
+
+this.author = author; 
+this.publisher = publisher;
+this.quantity = quantity;
+ }
+ }
+
+public class MapExample
+{
+public static void main(String[] args)
+ {
+ Map<Integer,Book> map=new LinkedHashMap<Integer,Book>();
+Book b1=new Book(1,"bigdata"," Vignesh Prajapati","manning",9); 
+Book b2=new Book(2,"Java","sunmicrosystems","crc press",8);
+Book b3=new Book(3,"mefa","Brian Marick"," pearson",7); 
+
+map.put(2,b2); 
+map.put(1,b1);
+map.put(3,b3);
+
+for(Map.Entry<Integer, Book>entry:map.entrySet())
+{
+int key=entry.getKey(); 
+Book b=entry.getValue();
+System.out.println(key+" Details:"); 
+System.out.println(b.id+""+b.name+""+b.author+""+b.publisher+""+b.quantity); 
+}
+ }
+ }
+
+
+
+OUTPUT:
+
+
+
+
+
+
+
+
+
+
+
+
+
+TreeMap:
+Treemap implements navigablemap,cloneable and serializable interface. Treemap does not allow null keys but can have multiple null values.treemap sames as hashmap but maintains an ascending order and it sorts using the natural order of its key. Treemap iterates over the linked data structure. Treemap does not use hashing for storing the key.Treemap provides the performance of o(log(n)).treemap is used to implement map interface and navigable map along with abstract class.
+PROGRAM:
+importjava.util.*;
+public class TreeMapExample
+{
+
 public static void main(String args[])
 {
-LinkedList<String>llg = new LinkedList<>();
-llg.add("IV Year");
-llg.add("UCEV");
-llg.add(1, "CSE");
-System.out.println(llg);
-llg.remove(1);
-System.out.println("After remove at index 1 " + llg);
-llg.remove("UCEV");
-System.out.println("After the remove object " + llg);
-    }
+TreeMap<Integer,String>tmap=new TreeMap<Integer,String>(); tmap.put(54,"jntuk"); 
+tmap.put(21,"ucev"); 
+tmap.put(77,"cse");
+tmap.put(18,"vzm"); 
+System.out.println("Iterating Treemap...");
+System.out.println("The set is: " + tmap.entrySet());
+
+for (Map.Entry<Integer, String> entry : tmap.entrySet()) 
+{
+    System.out.println(entry.getKey() + "/" + entry.getValue());
 }
+}
+ }
+
+
+Output:
 
