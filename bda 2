@@ -1,0 +1,30 @@
+importjava.util.ArrayList;
+importjava.util.Iterator;
+public class ArrayListExample
+{
+
+public static void main(String args[])
+{
+ArrayList<Integer>ilist = new ArrayList<Integer>();
+ilist.add(15);
+ilist.add(1,18);
+ilist.add(46);
+System.out.println(ilist);
+ilist.set(2,515);
+System.out.println(ilist);
+System.out.println(ilist.get(2));
+int sum=0;
+
+for(Integerelem:ilist)
+sum=sum+elem;
+
+System.out.println(sum);
+ArrayList<String>slist=new ArrayList<String>();
+slist.add("IV");
+slist.add("Year");
+slist.add("Students");
+slist.add("CSE");
+System.out.println(slist); 
+}
+ }
+
