@@ -1,0 +1,65 @@
+EXPERIMENT-6 (B)
+
+AIM:Write the following Pig Scripts on Unstructured Text Data
+
+i) Wordcount ( Tokenize, Flatten, GroupBY)
+ii) Top5 words as per the count in descending order
+(SortBY, LIMIT)
+iii) Find the total number of words whose count is > 5
+   
+INPUT TEXT DATA:
+input.txt
+I Know Your Failure 
+But I Wont Tell You
+I Know Your Success
+But I Wont Tell You
+I Know Everything About You 
+But I Wont Tell You
+I Am Vikramaditya
+I Am No God
+But Not One Of You
+
+i) Wordcount ( Tokenize, Flatten, GroupBY)
+
+SCRIPT:
+lines = LOAD 'input.txt'  as (line:chararray);
+words = FOREACH lines GENERATE FLATTEN(TOKENIZE($0));
+wordg  = GROUP words BY $0;
+wc = FOREACH wordg GENERATE group, COUNT(words) as (count:long);
+DUMP wc;
+
+
+OUTPUT:
+
+
+
+
+ii) Top5 words as per the count in descending order (SortBY, LIMIT):
+SCRIPT:
+lines = LOAD ‘input.txt'  as (line:chararray);
+words = FOREACH lines GENERATE FLATTEN(TOKENIZE($0));
+wordg  = GROUP words BY $0;
+wc = FOREACH wordg GENERATE group, COUNT(words) as (count:long);
+st = ORDER wc BY $1 DESC;
+l = LIMIT st 5;
+DUMP l;
+
+
+
+
+
+OUTPUT:
+
+
+iii) Find the total number of words whose count is > 5:
+
+SCRIPT:
+lines = LOAD 'wc.txt' using TextLoader() as (line:chararray);
+words = FOREACH lines GENERATE FLATTEN(TOKENIZE($0));
+wordg = GROUP words BY $0;
+wc = FOREACH wordg GENERATE group, COUNT(words) as (count:long);
+f = FILTER wc by count>5;
+DUMP f;
+
+
+OUTPUT:
