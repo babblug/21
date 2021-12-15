@@ -1,0 +1,120 @@
+AIM :To demonstrate how to set number of reducers in a map reduce program.
+
+ALGORITHM:
+Mypractitioner(key,value)
+{
+Public int getpractitioner(key,value,numofPractitions)
+{
+//implement the practitions to the mapper
+}
+}
+
+PROGRAM: 
+ Mapper: 
+import java.io.IOException; 
+import org.apache.hadoop.io.IntWritable; 
+import o rg.apache.hadoop.io.LongWritable; 
+import org.apache.hadoop.io.Text; 
+import org.apache.hadoop.mapreduce.Mapper;
+public class WordCountMapper extends Mapper<LongWritable, Text, Text, 
+IntWritable>
+{
+public void map(LongWritable ikey, Text ivalue, Context context)
+throws IOException, InterruptedException 
+{
+String line= ivalue.toString();
+        System.out.println(line); 
+String [] tokens = line.split("");
+int i=0;
+IntWritable val=new IntWritable(1);
+while(i<tokens.length) 
+{
+            context.write(new Text(tokens[i]),val);
+i++;
+}
+}
+}
+Reducer:
+import java.io.IOException; 
+import org.apache.hadoop.io.IntWritable; 
+import org.apache.hadoop.io.Text; 
+import org.apache.hadoop.mapreduce.Reducer; 
+
+public class WordCountReducer extends Reducer<Text, IntWritable, Text, 
+IntWritable>
+{
+public void reduce(Text _key, Iterable<IntWritable> values, Context 
+context)
+ throws IOException, InterruptedException
+{
+// process values 
+int sum=0;
+for (IntWritable val : values)
+{
+sum=sum+val.get();
+        } 
+context.write(_key,new IntWritable(sum));
+}
+}
+Driver:
+import org.apache.hadoop.conf.Configuration; 
+import org.apache.hadoop.fs.Path; 
+import org.apache.hadoop.io.IntWritable; 
+import org.apache.hadoop.io.Text; 
+import org.apache.hadoop.mapreduce.Job; 
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat; 
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+public class WordCountDriver
+ {
+public static void main(String[] args) throws Exception 
+{
+Configuration conf = new Configuration(); 
+Job job = Job.getInstance(conf, "wordcount");
+job.setPartitionerClass(MyPartitioner.class); 
+
+//set number reducers 
+job.setNumReduceTasks(2);
+        job.setJarByClass(WordCountDriver.class); 
+// TODO: specify a mapper 
+job.setMapperClass(WordCountMapper.class);
+
+// TODO: specify a reducer 
+job.setReducerClass(WordCountReducer.class);
+
+// TODO: specify output types 
+job.setOutputKeyClass(Text.class);
+job.setOutputValueClass(IntWritable.class); 
+
+// TODO: specify input and output DIRECTORIES (not files)
+FileInputFormat.setInputPaths(job, new Path(args[0])); 
+FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+if (!job.waitForCompletion(true))
+return;
+}
+
+}
+
+Partitioner:
+import org.apache.hadoop.mapreduce.Partitioner;
+import org.apache.hadoop.io.IntWritable; 
+import org.apache.hadoop.io.Text; 
+
+public class MyPartitioner extends Partitioner<Text,IntWritable>
+{
+@Override
+public int getPartitioner(Text word,IntWritable value,int number) 
+throws Exception
+{ 
+// partition key space into “number” of partitionsString     s=word.toString();
+If(s.charAt(0)>=’a’ && S.charAt(0)<=’m’)
+{
+Return 0;
+}
+
+ }
+
+}
+
+Output:
