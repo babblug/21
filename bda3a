@@ -1,0 +1,110 @@
+AIM: Write a map reduce JAVA program for word count.
+
+ALGORITHM:
+Mapper :
+ //Spilting of line by line
+Map(line)
+{
+ //pass line to the mapper.
+For each word in line:
+{
+        // for every word in line Emit<word,1>
+ //emit word and value 1
+}
+}
+Reducer:
+Reduce(key,list )
+{
+Sum=0; //intialise sum=0 to
+For each val in list
+{
+Sum=sum+val
+}
+Emit<key,sum>
+ //Output as word and their count 
+} 
+
+PROGRAM:
+WordCountMapper.java
+import java.io.IOException;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritable>
+ {
+public void map(LongWritable ikey, Text ivalue, Context context)
+throws IOException, InterruptedException 
+{
+String line= ivalue.toString();
+System.out.println(line);
+String [] tokens = line.split("");
+int i=0;IntWritable val=new IntWritable(1);
+while(i<tokens.length)
+{
+context.write(new Text(tokens[i]),val);i++;
+}
+}
+}
+
+
+WordCountReducer.java:
+import java.io.IOException; 
+import org.apache.hadoop.io.IntWritable; 
+import org.apache.hadoop.io.Text; 
+import org.apache.hadoop.mapreduce.Reducer; 
+public class WordCountReducer extends Reducer<Text, IntWritable, Text, 
+IntWritable>
+{
+public void reduce(Text _key, Iterable<IntWritable> values, Context    context)
+throws IOException, I nterruptedException 
+{
+// process values 
+int sum=0; 
+
+for (IntWritable val : values) 
+{
+sum=sum+val.get(); 
+} 
+context.write(_key,new IntWritable(sum));
+}
+}
+
+
+
+WordCountDriver Program:
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+public class WordCountDriver
+{
+public static void main(String[] args) throws Exception 
+{
+Configuration conf = new Configuration();
+Job job = Job.getInstance(conf, "wordcount");
+job.setJarByClass(WordCountDriver.class);
+
+// TODO: specify a mapper
+job.setMapperClass(WordCountMapper.class);
+
+// TODO: specify a reducer
+job.setReducerClass(WordCountReducer.class);
+
+// TODO: specify output types
+job.setOutputKeyClass(Text.class);job.setOutputValueClass(IntWritable.class);
+
+// TODO: specify input and output DIRECTORIES (not files)
+FileInputFormat.setInputPaths(job, new Path(args[0]));
+FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+if (!job.waitForCompletion(true))
+return;
+}
+}
+
+Output:
+
