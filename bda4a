@@ -1,0 +1,97 @@
+AIM: Write a map reduce program for finding average rating of all the movies
+SOURCE CODE:
+AvgMapper:
+ 
+import java.io.IOException;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+ 
+public class AvgMapper extends Mapper<LongWritable, Text, Text, DoubleWritable>
+{
+ 
+ 
+public void map (LongWritable ll, Text tt, Context cc) throws IOException , InterruptedException
+{
+String temp=tt.toString();
+String [] tempp=temp.split(",");
+if(tempp[0].charAt(0)!='u')
+{
+ 
+cc.write(new Text(tempp[1]),new DoubleWritable(Double.parseDouble(tempp[2])));
+    }
+}
+} 
+ 
+AvgReducer:
+ 
+ import java.io.IOException;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+ 
+public class AvgReducer extends Reducer <Text, DoubleWritable, Text, DoubleWritable>
+{
+public void reduce (Text tt, Iterable<DoubleWritable> itt, Context cc) throws IOException , InterruptedException
+{
+ 
+double sum=0;
+int cnt=1;
+for(DoubleWritable it:itt)
+{
+sum=sum+it.get();
+ 
+cnt++;
+}
+cc.write(tt,new DoubleWritable(sum/cnt));
+ 
+}
+}
+ 
+AvgDriver:
+ 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.DoubleWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+ 
+public class AvgDriver
+{
+ 
+public static void main(String []args) throws Exception
+{
+ 
+Configuration conf=new Configuration();
+Job jobb=Job.getInstance(conf,"Maverage");
+ 
+jobb.setJarByClass(Mdriver.class);
+jobb.setReducerClass(Mreducer.class);
+jobb.setMapperClass(Mmapper.class);
+ 
+FileInputFormat.setInputPaths(jobb, new Path(args[0]));
+FileOutputFormat.setOutputPath(jobb, new Path(args[1]));
+ 
+jobb.setOutputKeyClass(Text.class);
+jobb.setOutputValueClass(DoubleWritable.class);
+ 
+if(!jobb.waitForCompletion(true))
+{
+return;
+}
+}
+}
+ 
+ 
+INPUT:
+ 
+ratings.csv file from https://grouplens.org/datasets/movielens dataset (recommended for education zip file)
+ 
+ 
+Output:
