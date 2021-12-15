@@ -1,0 +1,52 @@
+AIM:
+Explain the steps of Pig Installation  and Pig Modes of Execution
+ 
+DESCRIPTION:
+
+Installation:
+Step 1: Download the new release of Apache Pig from this Link(https://downloads.apache.org/pig/pig-0.17.0/). 
+Step 2: Now move the downloaded Pig tar file to your desired location.
+Step 3: Now we extract this tar file with the help of below command (make sure to check your tar filename):
+
+tar -xvf pig-0.17.0.tar.gz
+
+Step 4: We need to change the environment variable for Pig’s location. For that open the bashrc file with below command.
+
+nano .bashrc
+
+Step 5: Add the following in the file (change path according to the pig files location)
+
+#Pig location
+export PIG_INSTALL=/usr/local/pig-0.17.0
+export PATH=$PATH:/usr/local/pig-0.17.0/bin
+
+Step 6: Then check whether you have configured it correctly or not using the below command:
+
+source .bashrc
+
+
+Step 7: Once you get it correct that’s it we have successfully install pig to our Hadoop single node setup, now we start pig with below pig command
+
+pig
+
+Step 8: You can check your pig version with the below command.
+
+pig -version
+
+Pig Modes Of Execution
+You can run Apache Pig in two modes, namely, Local Mode and Map Reduce mode.
+Local Mode:
+In this mode, all the files are installed and run from your local host and local file system. There is no need of Hadoop or HDFS. This mode is generally used for testing purpose.
+
+command : pig -x local
+
+MapReduce Mode:
+MapReduce mode is where we load or process the data that exists in the Hadoop File System (HDFS) using Apache Pig. In this mode, whenever we execute the Pig Latin statements to process the data, a MapReduce job is invoked in the back-end to perform a particular operation on the data that exists in the HDFS.
+
+command : pig -x mapreduce
+
+Apache Pig scripts can be executed in three ways, namely, interactive mode, batch mode, and embedded mode.
+
+Interactive Mode (Grunt shell) − You can run Apache Pig in interactive mode using the Grunt shell. In this shell, you can enter the Pig Latin statements and get the output (using Dump operator).
+Batch Mode (Script) − You can run Apache Pig in Batch mode by writing the Pig Latin script in a single file with .pig extension.
+Embedded Mode (UDF) − Apache Pig provides the provision of defining our own functions (User Defined Functions) in programming languages such as Java, and using them in our script.
