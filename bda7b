@@ -1,0 +1,71 @@
+AIM: Write the following Hive Queries on Structured Data
+
+Let us consider the input record format as Emp(name, age, dept, salary)
+i) Find names of all employees whose is age is less than 36 and greater than 25
+ii) Find the number of employees in each department
+iii) Find the number of employee whose salary is greater 40000 and name starts
+With ‘p’
+iv) Find the number of employees whose salary is greater than the average salary
+of all employees
+
+INPUT TEXT DATA:
+Emp.csv
+Balu,25,it,100000
+meera,30,sales,50000
+sai,45,business,25000
+edukondalu,20,sales,90000
+laskhman,34,business,50000
+raghav,45,it,60000
+jagadeesh,22,it,500000
+chandu,49,sales,40000
+rakesh,35,sales,400000
+vijay,28,business,500000
+
+Database, Tables creation and loading data:
+create database Balu;
+use Balu;
+create table emptable (name String, age int, dept String , salary float ) row format delimited fields terminated by ‘,’ ;
+load data local inpath ‘Emp.csv’ into table emptable ;
+i) Find names of all employees whose is age is less than 36 and greater than 25
+
+SCRIPT :
+select e.name
+from emptable as e
+where e.age <36 and e.age >25;
+
+OUTPUT:
+
+
+ii) Find the number of employees in each department
+
+SCRIPT:
+select e.dept, count(*)
+from emptable as e
+group by e.dept;
+
+
+OUTPUT:
+
+
+iii) Find the number of employee whose salary is greater 40000 and name starts with ‘j’
+
+SCRIPT:
+select count(*)
+from emptable as e
+where e.salary >40000 and e.name like ('j%');
+
+
+OUTPUT:
+
+
+iv) Find the number of employees whose salary is greater than the average salary of all employees
+
+SCRIPT:
+select count(*)
+from emptable e
+where e.salary >
+(select avg(salary) from emptable e);
+
+
+
+OUTPUT:
